@@ -1,5 +1,5 @@
 name: tahfeez
-description: "A new Flutter project."
+description: "A Flutter app for Islamic education management"
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -9,11 +9,29 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  google_fonts: ^6.2.1
+  intl: ^0.20.2
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+  dio: ^5.8.0
+  flutter_secure_storage: ^9.2.4
+  json_annotation: ^4.9.0
+  get_it: ^8.0.3
+  shared_preferences: ^2.5.3
+  dartz: ^0.10.1
+  fluttertoast: ^9.1.0
+  pretty_dio_logger: ^1.4.0
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  build_runner: ^2.15.0
+  json_serializable: ^6.14.0
 
 flutter:
   uses-material-design: true
+  generate: true
