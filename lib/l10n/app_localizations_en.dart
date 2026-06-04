@@ -166,6 +166,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submit => 'Submit';
 
   @override
+  String get classCreated => 'Class created successfully!';
+
+  @override
+  String get classDeleted => 'Class deleted successfully!';
+
+  @override
   String get retry => 'Retry';
 
   @override

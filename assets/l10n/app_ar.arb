@@ -60,6 +60,8 @@
   "typeRequired": "يرجى اختيار نوع الفصل",
   "modeRequired": "يرجى اختيار وضع الفصل",
   "submit": "إرسال",
+  "classCreated": "تم إنشاء الفصل بنجاح!",
+  "classDeleted": "تم حذف الفصل بنجاح!",
   "retry": "إعادة المحاولة",
   "noClassesFound": "لا توجد فصول",
   "classesCount": "{count} فصل",

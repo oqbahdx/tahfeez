@@ -60,6 +60,8 @@
   "typeRequired": "Please select a class type",
   "modeRequired": "Please select a class mode",
   "submit": "Submit",
+  "classCreated": "Class created successfully!",
+  "classDeleted": "Class deleted successfully!",
   "retry": "Retry",
   "noClassesFound": "No classes found",
   "classesCount": "{count} classes",

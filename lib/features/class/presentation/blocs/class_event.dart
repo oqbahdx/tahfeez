@@ -8,6 +8,8 @@ abstract class ClassEvent extends Equatable {
 
 class GetAllClassesEvent extends ClassEvent {}
 
+class RefreshClassesEvent extends ClassEvent {}
+
 class GetClassByIdEvent extends ClassEvent {
   final String id;
   const GetClassByIdEvent(this.id);
@@ -83,4 +85,22 @@ class AssignStaffEvent extends ClassEvent {
   });
   @override
   List<Object?> get props => [classId, teacherId, assistantId, supervisorId];
+}
+
+class SearchClassesEvent extends ClassEvent {
+  final String query;
+  const SearchClassesEvent(this.query);
+  @override
+  List<Object?> get props => [query];
+}
+
+class FetchUsersEvent extends ClassEvent {
+  final String role;
+  const FetchUsersEvent(this.role);
+  @override
+  List<Object?> get props => [role];
+}
+
+class ResetOperationStateEvent extends ClassEvent {
+  const ResetOperationStateEvent();
 }

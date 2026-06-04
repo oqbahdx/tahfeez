@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/utils/toast_helper.dart';
 import '../../../../theme/tahfeez_theme.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../screens/main_shell.dart';
 import '../../presentation/blocs/auth_bloc.dart';
 import '../../presentation/blocs/auth_event.dart';
 import '../../presentation/blocs/auth_state.dart';
@@ -84,21 +83,17 @@ class _LoginScreenState extends State<LoginScreen> {
     final currentLocale = Localizations.localeOf(context);
     final isArabic = currentLocale.languageCode == 'ar';
 
-    return BlocConsumer<AuthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
+      listenWhen: (previous, current) => current is AuthError,
       listener: (context, state) {
-        if (state is AuthAuthenticated) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => MainShell(onLocaleChange: widget.onLocaleChange),
-            ),
-          );
-        } else if (state is AuthError) {
+        if (state is AuthError) {
           AppToast.error(state.message);
         }
       },
-      builder: (context, state) {
-        final isLoading = state is AuthLoading;
-        return Scaffold(
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          final isLoading = state is AuthLoading;
+          return Scaffold(
           backgroundColor: TahfeezColors.background,
           body: Stack(
             children: [
@@ -202,7 +197,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
       },
-    );
+    ),
+  );
   }
 
   Widget _buildLeftPanel() {

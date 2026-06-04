@@ -12,13 +12,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetAccessTokenUseCase getAccessTokenUseCase;
   final RefreshTokenUseCase refreshTokenUseCase;
 
+  static const _splashDuration = Duration(seconds: 3);
+
   AuthBloc({
     required this.loginUseCase,
     required this.registerUseCase,
     required this.logoutUseCase,
     required this.getAccessTokenUseCase,
     required this.refreshTokenUseCase,
-  }) : super(AuthInitial()) {
+  }) : super(AuthSplash()) {
     on<LoginEvent>(_onLogin);
     on<RegisterEvent>(_onRegister);
     on<LogoutEvent>(_onLogout);
@@ -64,7 +66,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     CheckAuthEvent event,
     Emitter<AuthState> emit,
   ) async {
+    emit(AuthSplash());
+    final start = DateTime.now();
     final result = await getAccessTokenUseCase();
+    final elapsed = DateTime.now().difference(start).inMilliseconds;
+    final remaining = _splashDuration.inMilliseconds - elapsed;
+    if (remaining > 0) {
+      await Future.delayed(Duration(milliseconds: remaining));
+    }
     result.fold(
       (failure) => emit(AuthUnauthenticated()),
       (token) {

@@ -28,4 +28,5 @@ abstract class ClassRepository {
     String? assistantId,
     String? supervisorId,
   });
+  Future<Either<Failure, List<User>>> getUsersByRole(String role);
 }

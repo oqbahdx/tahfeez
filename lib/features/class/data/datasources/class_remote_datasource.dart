@@ -29,6 +29,7 @@ abstract class ClassRemoteDataSource {
     String? assistantId,
     String? supervisorId,
   });
+  Future<List<UserModel>> getUsersByRole(String role);
 }
 
 class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
@@ -46,6 +47,10 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
           .whereType<Map<String, dynamic>>()
           .map((e) => ClassModel.fromJson(e))
           .toList();
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -58,6 +63,10 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
         '${ApiConstants.classesEndpoint}/$id',
       );
       return ClassModel.fromJson(response);
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -70,6 +79,10 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
         '${ApiConstants.classesEndpoint}/$classId/students',
       );
       return (response as List).map((e) => UserModel.fromJson(e)).toList();
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -101,8 +114,11 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
         throw ServerException(message: 'Invalid response: missing class ID');
       }
       return id;
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
     } catch (e) {
-      if (e is ServerException) rethrow;
       throw ServerException(message: e.toString());
     }
   }
@@ -120,6 +136,10 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
         data: {'name': name, 'type': type, 'mode': mode},
       );
       return ClassModel.fromJson(response);
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -129,6 +149,10 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
   Future<void> deleteClass(String id) async {
     try {
       await apiClient.delete('${ApiConstants.classesEndpoint}/$id');
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -151,6 +175,32 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
         },
       );
       return ClassModel.fromJson(response);
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<List<UserModel>> getUsersByRole(String role) async {
+    try {
+      final response = await apiClient.get(
+        ApiConstants.usersEndpoint,
+        queryParameters: {'role': role},
+      );
+      final raw = response['value'];
+      if (raw == null || raw is! List) return [];
+      return raw
+          .whereType<Map<String, dynamic>>()
+          .map((e) => UserModel.fromJson(e))
+          .toList();
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
     } catch (e) {
       throw ServerException(message: e.toString());
     }

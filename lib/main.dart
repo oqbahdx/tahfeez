@@ -5,8 +5,8 @@ import 'l10n/app_localizations.dart';
 import 'features/auth/presentation/blocs/auth_bloc.dart';
 import 'features/auth/presentation/blocs/auth_event.dart';
 import 'features/auth/presentation/blocs/auth_state.dart';
-import 'features/class/presentation/blocs/class_bloc.dart';
 import 'features/auth/presentation/pages/login_screen.dart';
+import 'features/auth/presentation/pages/splash_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/main_shell.dart';
 
@@ -47,11 +47,11 @@ class _MainAppState extends State<MainApp> {
         supportedLocales: AppLocalizations.supportedLocales,
         home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
+            if (state is AuthSplash || state is AuthInitial) {
+              return const SplashScreen();
+            }
             if (state is AuthAuthenticated) {
-              return BlocProvider(
-                create: (_) => di.sl<ClassBloc>(),
-                child: MainShell(onLocaleChange: _onLocaleChange),
-              );
+              return MainShell(onLocaleChange: _onLocaleChange);
             }
             if (_showRegister) {
               return RegisterScreen(

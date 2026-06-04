@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/entities/class_entity.dart';
 import '../../domain/usecases/class_usecases.dart';
 import 'class_event.dart';
 import 'class_state.dart';
@@ -11,6 +12,10 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
   final UpdateClassUseCase updateClassUseCase;
   final DeleteClassUseCase deleteClassUseCase;
   final AssignStaffUseCase assignStaffUseCase;
+  final GetUsersByRoleUseCase getUsersByRoleUseCase;
+
+  List<ClassEntity> _cachedClasses = [];
+  String _currentSearchQuery = '';
 
   ClassBloc({
     required this.getAllClassesUseCase,
@@ -20,14 +25,19 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     required this.updateClassUseCase,
     required this.deleteClassUseCase,
     required this.assignStaffUseCase,
+    required this.getUsersByRoleUseCase,
   }) : super(ClassInitial()) {
     on<GetAllClassesEvent>(_onGetAllClasses);
+    on<RefreshClassesEvent>(_onRefreshClasses);
     on<GetClassByIdEvent>(_onGetClassById);
     on<GetClassStudentsEvent>(_onGetClassStudents);
     on<CreateClassEvent>(_onCreateClass);
     on<UpdateClassEvent>(_onUpdateClass);
     on<DeleteClassEvent>(_onDeleteClass);
     on<AssignStaffEvent>(_onAssignStaff);
+    on<SearchClassesEvent>(_onSearchClasses);
+    on<FetchUsersEvent>(_onFetchUsers);
+    on<ResetOperationStateEvent>(_onResetOperationState);
   }
 
   Future<void> _onGetAllClasses(
@@ -38,7 +48,30 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     final result = await getAllClassesUseCase();
     result.fold(
       (failure) => emit(ClassError(failure.message)),
-      (classes) => emit(ClassesLoaded(classes)),
+      (classes) {
+        _cachedClasses = List.from(classes);
+        _applySearchFilter(emit, classes);
+      },
+    );
+  }
+
+  Future<void> _onRefreshClasses(
+    RefreshClassesEvent event,
+    Emitter<ClassState> emit,
+  ) async {
+    final result = await getAllClassesUseCase();
+    result.fold(
+      (failure) {
+        if (_cachedClasses.isNotEmpty) {
+          _applySearchFilter(emit, _cachedClasses);
+        } else {
+          emit(ClassError(failure.message));
+        }
+      },
+      (classes) {
+        _cachedClasses = List.from(classes);
+        _applySearchFilter(emit, classes);
+      },
     );
   }
 
@@ -70,7 +103,7 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     CreateClassEvent event,
     Emitter<ClassState> emit,
   ) async {
-    emit(ClassLoading());
+    emit(const ClassOperationLoading());
     final result = await createClassUseCase(
       name: event.name,
       type: event.type,
@@ -81,7 +114,7 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     );
     result.fold(
       (failure) => emit(ClassError(failure.message)),
-      (id) => emit(ClassOperationSuccess('Class created successfully (ID: $id)')),
+      (_) => emit(const ClassOperationSuccess('created')),
     );
   }
 
@@ -89,7 +122,7 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     UpdateClassEvent event,
     Emitter<ClassState> emit,
   ) async {
-    emit(ClassLoading());
+    emit(const ClassOperationLoading());
     final result = await updateClassUseCase(
       id: event.id,
       name: event.name,
@@ -98,7 +131,7 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     );
     result.fold(
       (failure) => emit(ClassError(failure.message)),
-      (_) => emit(const ClassOperationSuccess('Class updated successfully')),
+      (_) => emit(const ClassOperationSuccess('updated')),
     );
   }
 
@@ -106,11 +139,22 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     DeleteClassEvent event,
     Emitter<ClassState> emit,
   ) async {
-    emit(ClassLoading());
+    final previousState = state;
+    if (previousState is ClassesLoaded) {
+      final updatedClasses = previousState.classes
+          .where((c) => c.id != event.id)
+          .toList();
+      _cachedClasses = updatedClasses;
+      _applySearchFilter(emit, updatedClasses);
+    }
+    emit(const ClassOperationLoading());
     final result = await deleteClassUseCase(event.id);
     result.fold(
-      (failure) => emit(ClassError(failure.message)),
-      (_) => emit(const ClassOperationSuccess('Class deleted successfully')),
+      (failure) {
+        add(GetAllClassesEvent());
+        emit(ClassError(failure.message));
+      },
+      (_) => emit(const ClassOperationSuccess('deleted')),
     );
   }
 
@@ -118,7 +162,7 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     AssignStaffEvent event,
     Emitter<ClassState> emit,
   ) async {
-    emit(ClassLoading());
+    emit(const ClassOperationLoading());
     final result = await assignStaffUseCase(
       classId: event.classId,
       teacherId: event.teacherId,
@@ -127,7 +171,61 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     );
     result.fold(
       (failure) => emit(ClassError(failure.message)),
-      (_) => emit(const ClassOperationSuccess('Staff assigned successfully')),
+      (_) => emit(const ClassOperationSuccess('staff_assigned')),
     );
+  }
+
+  Future<void> _onSearchClasses(
+    SearchClassesEvent event,
+    Emitter<ClassState> emit,
+  ) async {
+    _currentSearchQuery = event.query;
+    if (_cachedClasses.isNotEmpty) {
+      _applySearchFilter(emit, _cachedClasses);
+    }
+  }
+
+  Future<void> _onFetchUsers(
+    FetchUsersEvent event,
+    Emitter<ClassState> emit,
+  ) async {
+    final result = await getUsersByRoleUseCase(event.role);
+    result.fold(
+      (failure) => null,
+      (users) => emit(UsersLoaded(users)),
+    );
+  }
+
+  Future<void> _onResetOperationState(
+    ResetOperationStateEvent event,
+    Emitter<ClassState> emit,
+  ) async {
+    if (_cachedClasses.isNotEmpty) {
+      _applySearchFilter(emit, _cachedClasses);
+    } else {
+      emit(ClassInitial());
+    }
+  }
+
+  void _applySearchFilter(
+    Emitter<ClassState> emit,
+    List<ClassEntity> classes,
+  ) {
+    final query = _currentSearchQuery.toLowerCase().trim();
+    if (query.isEmpty) {
+      emit(ClassesLoaded(
+        classes: List.from(classes),
+        filteredClasses: List.from(classes),
+      ));
+    } else {
+      final filtered = classes.where((c) {
+        return c.name.toLowerCase().contains(query);
+      }).toList();
+      emit(ClassesLoaded(
+        classes: List.from(classes),
+        filteredClasses: filtered,
+        searchQuery: _currentSearchQuery,
+      ));
+    }
   }
 }

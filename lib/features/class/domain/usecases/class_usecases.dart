@@ -102,3 +102,13 @@ class AssignStaffUseCase {
     );
   }
 }
+
+class GetUsersByRoleUseCase {
+  final ClassRepository repository;
+
+  GetUsersByRoleUseCase(this.repository);
+
+  Future<Either<Failure, List<User>>> call(String role) {
+    return repository.getUsersByRole(role);
+  }
+}

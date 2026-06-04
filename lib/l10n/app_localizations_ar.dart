@@ -164,6 +164,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get submit => 'إرسال';
 
   @override
+  String get classCreated => 'تم إنشاء الفصل بنجاح!';
+
+  @override
+  String get classDeleted => 'تم حذف الفصل بنجاح!';
+
+  @override
   String get retry => 'إعادة المحاولة';
 
   @override

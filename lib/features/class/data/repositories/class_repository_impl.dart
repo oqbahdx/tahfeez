@@ -128,4 +128,16 @@ class ClassRepositoryImpl implements ClassRepository {
       return Left(NetworkFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, List<User>>> getUsersByRole(String role) async {
+    try {
+      final result = await remoteDataSource.getUsersByRole(role);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    }
+  }
 }

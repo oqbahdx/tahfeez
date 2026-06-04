@@ -398,6 +398,18 @@ abstract class AppLocalizations {
   /// **'Submit'**
   String get submit;
 
+  /// No description provided for @classCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Class created successfully!'**
+  String get classCreated;
+
+  /// No description provided for @classDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Class deleted successfully!'**
+  String get classDeleted;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:

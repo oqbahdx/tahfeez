@@ -14,9 +14,17 @@ class ClassLoading extends ClassState {}
 
 class ClassesLoaded extends ClassState {
   final List<ClassEntity> classes;
-  const ClassesLoaded(this.classes);
+  final List<ClassEntity> filteredClasses;
+  final String searchQuery;
+
+  const ClassesLoaded({
+    required this.classes,
+    required this.filteredClasses,
+    this.searchQuery = '',
+  });
+
   @override
-  List<Object?> get props => [classes];
+  List<Object?> get props => [classes, filteredClasses, searchQuery];
 }
 
 class ClassLoaded extends ClassState {
@@ -33,11 +41,22 @@ class ClassStudentsLoaded extends ClassState {
   List<Object?> get props => [students];
 }
 
+class UsersLoaded extends ClassState {
+  final List<User> users;
+  const UsersLoaded(this.users);
+  @override
+  List<Object?> get props => [users];
+}
+
 class ClassOperationSuccess extends ClassState {
   final String message;
   const ClassOperationSuccess(this.message);
   @override
   List<Object?> get props => [message];
+}
+
+class ClassOperationLoading extends ClassState {
+  const ClassOperationLoading();
 }
 
 class ClassError extends ClassState {

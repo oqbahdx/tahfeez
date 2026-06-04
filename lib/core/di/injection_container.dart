@@ -60,6 +60,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateClassUseCase(sl()));
   sl.registerLazySingleton(() => DeleteClassUseCase(sl()));
   sl.registerLazySingleton(() => AssignStaffUseCase(sl()));
+  sl.registerLazySingleton(() => GetUsersByRoleUseCase(sl()));
 
   sl.registerFactory(
     () => AuthBloc(
@@ -80,6 +81,7 @@ Future<void> init() async {
       updateClassUseCase: sl(),
       deleteClassUseCase: sl(),
       assignStaffUseCase: sl(),
+      getUsersByRoleUseCase: sl(),
     ),
   );
 }

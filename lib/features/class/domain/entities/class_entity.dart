@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
+import '../enums/class_type.dart';
+import '../enums/class_mode.dart';
 
 class ClassEntity extends Equatable {
   final String id;
   final String name;
-  final int type;
-  final int mode;
+  final ClassType classType;
+  final ClassMode classMode;
   final String? teacherId;
   final String? teacherName;
   final String? assistantId;
@@ -16,8 +18,8 @@ class ClassEntity extends Equatable {
   const ClassEntity({
     required this.id,
     required this.name,
-    required this.type,
-    required this.mode,
+    required this.classType,
+    required this.classMode,
     this.teacherId,
     this.teacherName,
     this.assistantId,
@@ -27,34 +29,18 @@ class ClassEntity extends Equatable {
     this.studentCount = 0,
   });
 
-  String get typeName {
-    switch (type) {
-      case 1:
-        return 'Boys';
-      case 2:
-        return 'Girls';
-      default:
-        return 'Unknown';
-    }
-  }
+  int get type => classType.value;
+  int get mode => classMode.value;
 
-  String get modeName {
-    switch (mode) {
-      case 1:
-        return 'Online';
-      case 2:
-        return 'Offline';
-      default:
-        return 'Unknown';
-    }
-  }
+  String get typeName => classType.displayName;
+  String get modeName => classMode.displayName;
 
   @override
   List<Object?> get props => [
     id,
     name,
-    type,
-    mode,
+    classType,
+    classMode,
     teacherId,
     teacherName,
     assistantId,
