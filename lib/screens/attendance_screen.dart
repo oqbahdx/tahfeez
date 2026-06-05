@@ -243,6 +243,7 @@ class _AttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -265,7 +266,7 @@ class _AttendanceCard extends StatelessWidget {
               children: [
                 _buildStudentInfo(),
                 const Spacer(),
-                _buildStatusToggle(),
+                _buildStatusToggle(l10n),
               ],
             );
           }
@@ -274,7 +275,7 @@ class _AttendanceCard extends StatelessWidget {
             children: [
               _buildStudentInfo(),
               const SizedBox(height: 12),
-              _buildStatusToggle(),
+              _buildStatusToggle(l10n),
             ],
           );
         },
@@ -332,7 +333,7 @@ class _AttendanceCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusToggle() {
+  Widget _buildStatusToggle(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -343,21 +344,21 @@ class _AttendanceCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _StatusOption(
-            label: 'Present',
+            label: l10n.present,
             isSelected: student.status == 'present',
             selectedBg: TahfeezColors.primaryContainer,
             selectedText: TahfeezColors.onPrimaryContainer,
             onTap: () => onStatusChanged('present'),
           ),
           _StatusOption(
-            label: 'Absent',
+            label: l10n.absent,
             isSelected: student.status == 'absent',
             selectedBg: TahfeezColors.errorContainer,
             selectedText: TahfeezColors.onErrorContainer,
             onTap: () => onStatusChanged('absent'),
           ),
           _StatusOption(
-            label: 'Excused',
+            label: l10n.excused,
             isSelected: student.status == 'excused',
             selectedBg: TahfeezColors.secondaryContainer,
             selectedText: TahfeezColors.onSecondaryContainer,

@@ -37,21 +37,20 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _validate() {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
+    final l10n = AppLocalizations.of(context);
     String? emailErr;
     String? passwordErr;
 
     if (email.isEmpty) {
-      emailErr = AppLocalizations.of(context)?.emailAddress != null
-          ? 'Email is required'
-          : 'Email is required';
+      emailErr = l10n?.emailRequired ?? 'Email is required';
     } else if (!RegExp(r'^[\w.+\-]+@[\w\-]+\.[a-zA-Z]{2,}$').hasMatch(email)) {
-      emailErr = 'Enter a valid email address';
+      emailErr = l10n?.invalidEmail ?? 'Enter a valid email address';
     }
 
     if (password.isEmpty) {
-      passwordErr = 'Password is required';
+      passwordErr = l10n?.passwordRequired ?? 'Password is required';
     } else if (password.length < 6) {
-      passwordErr = AppLocalizations.of(context)?.passwordTooShort ?? 'Password too short';
+      passwordErr = l10n?.passwordTooShort ?? 'Password too short';
     }
 
     setState(() {
@@ -79,6 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isWide = MediaQuery.of(context).size.width > 700;
     final currentLocale = Localizations.localeOf(context);
     final isArabic = currentLocale.languageCode == 'ar';
@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           size: 18,
                         ),
                         label: Text(
-                          isArabic ? 'English' : 'العربية',
+                          isArabic ? l10n.languageEnglish : l10n.languageArabic,
                           style: TahfeezTextStyles.labelMd.copyWith(
                             color: TahfeezColors.primary,
                           ),
@@ -202,6 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLeftPanel() {
+    final l10n = AppLocalizations.of(context)!;
     return Expanded(
       child: ClipRRect(
         borderRadius: const BorderRadius.horizontal(left: Radius.circular(24)),
@@ -239,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Sacred tradition meets modern management. Streamlining Quranic education for institutions.',
+                    l10n.tagline,
                     style: TahfeezTextStyles.bodyLg.copyWith(
                       color: TahfeezColors.primaryFixedDim,
                     ),
@@ -265,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            'Secure access for administrators, teachers, and staff.',
+                            l10n.secureAccess,
                             style: TahfeezTextStyles.labelMd.copyWith(
                               color: TahfeezColors.primaryFixed,
                             ),

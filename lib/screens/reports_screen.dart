@@ -1136,7 +1136,7 @@ class _SalariesTab extends StatelessWidget {
                       SizedBox(
                         width: 80,
                         child: Text(
-                          'Amount',
+                          l10n.amount,
                           style: TahfeezTextStyles.labelLg.copyWith(
                             color: TahfeezColors.onSurfaceVariant,
                           ),
@@ -1230,6 +1230,7 @@ class _SalaryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -1343,7 +1344,7 @@ class _SalaryRow extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              staff.isPaid ? 'Paid' : 'Unpaid',
+                              staff.isPaid ? l10n.paid : l10n.unpaid,
                               style: TahfeezTextStyles.labelMd.copyWith(
                                 color: staff.isPaid
                                     ? TahfeezColors.primary

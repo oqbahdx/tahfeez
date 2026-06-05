@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../domain/entities/auth_token.dart';
 import '../../domain/usecases/auth_usecases.dart';
@@ -77,7 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthUnauthenticated()),
       (token) {
-        if (token != null && token.isNotEmpty) {
+        if (token != null && token.isNotEmpty && !JwtDecoder.isExpired(token)) {
           emit(
             AuthAuthenticated(
               AuthToken(
@@ -89,6 +90,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             ),
           );
         } else {
+          logoutUseCase();
           emit(AuthUnauthenticated());
         }
       },

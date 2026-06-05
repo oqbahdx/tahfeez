@@ -10,31 +10,93 @@ class EmptyClassesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(40),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.school_outlined,
-              size: 80,
-              color: TahfeezColors.onSurfaceVariant.withOpacity(0.4),
+            // Layered icon illustration
+            SizedBox(
+              width: 120,
+              height: 120,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Outermost ring
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: TahfeezColors.primary.withOpacity(0.04),
+                    ),
+                  ),
+                  // Middle ring
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: TahfeezColors.primary.withOpacity(0.07),
+                    ),
+                  ),
+                  // Icon container
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: TahfeezColors.primary.withOpacity(0.10),
+                    ),
+                    child: Icon(
+                      Icons.school_rounded,
+                      size: 32,
+                      color: TahfeezColors.primary.withOpacity(0.6),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             Text(
               l10n.noClassesFound,
               style: TahfeezTextStyles.titleLg.copyWith(
+                color: TahfeezColors.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.noClassesFoundSubtitle,
+              style: TahfeezTextStyles.bodyMd.copyWith(
                 color: TahfeezColors.onSurfaceVariant,
+                height: 1.5,
               ),
               textAlign: TextAlign.center,
             ),
             if (onRetry != null) ...[
-              const SizedBox(height: 16),
+              const SizedBox(height: 28),
               FilledButton.icon(
                 onPressed: onRetry,
-                icon: const Icon(Icons.refresh, size: 18),
-                label: Text(l10n.retry),
+                style: FilledButton.styleFrom(
+                  backgroundColor: TahfeezColors.primary,
+                  foregroundColor: TahfeezColors.onPrimary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: const Icon(Icons.refresh_rounded, size: 18),
+                label: Text(
+                  l10n.retry,
+                  style: TahfeezTextStyles.labelLg,
+                ),
               ),
             ],
           ],

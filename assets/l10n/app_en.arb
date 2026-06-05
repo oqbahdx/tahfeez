@@ -64,6 +64,34 @@
   "classDeleted": "Class deleted successfully!",
   "retry": "Retry",
   "noClassesFound": "No classes found",
+  "noClassesFoundSubtitle": "No classes yet. Tap + to add your first class.",
+  "addClassSubtitle": "Create a new class",
+  "classNameHint": "e.g. Quran Class A",
+  "classTypePlaceholder": "Select type",
+  "classModePlaceholder": "Select mode",
+  "submitting": "Submitting...",
+  "emailRequired": "Email is required",
+  "invalidEmail": "Enter a valid email address",
+  "passwordRequired": "Password is required",
+  "usernameRequired": "Username is required",
+  "usernameMinLength": "Username must be at least 3 characters",
+  "usernameInvalidChars": "Username can only contain letters, numbers, and underscores",
+  "fullNameRequired": "Full name is required",
+  "fullNameMinLength": "Full name must be at least 2 characters",
+  "passwordComplexity": "Password must be 8+ chars with uppercase, lowercase, and a special character",
+  "confirmPasswordRequired": "Confirm password is required",
+  "failedToLoadClasses": "Failed to load classes",
+  "checkConnectionAndRetry": "Check your connection and try again.",
+  "classNameTooLong": "Class name is too long",
+  "manageStaffPayroll": "Manage staff payroll and payments.",
+  "forOctober2023": "For October 2023",
+  "staffMembersCount": "{count} Staff Members",
+  "studentsListCount": "{count} Students",
+  "@studentsListCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "classesCount": "{count} classes",
   "@classesCount": {
     "placeholders": {

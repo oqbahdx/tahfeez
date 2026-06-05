@@ -15,6 +15,8 @@ class ApiClient {
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
 
+  bool _isRefreshing = false;
+
   ApiClient(this._dio, this._secureStorage) {
     _dio.options.baseUrl = ApiConstants.baseUrl;
     _dio.options.connectTimeout = const Duration(seconds: 30);
@@ -37,7 +39,7 @@ class ApiClient {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final token = await getAccessToken();
-          if (token != null) {
+          if (token != null && !_isAuthEndpoint(options.path)) {
             options.headers['Authorization'] = 'Bearer $token';
           }
           // Only set JSON as default if the request hasn't already specified
@@ -49,20 +51,28 @@ class ApiClient {
           return handler.next(response);
         },
         onError: (error, handler) async {
-
-          if (error.response?.statusCode == 401) {
-            final refreshed = await _refreshToken();
-            if (refreshed) {
-              final token = await getAccessToken();
-              error.requestOptions.headers['Authorization'] = 'Bearer $token';
-              final response = await _dio.fetch(error.requestOptions);
-              return handler.resolve(response);
+          if (error.response?.statusCode == 401 && !_isAuthEndpoint(error.requestOptions.path) && !_isRefreshing) {
+            _isRefreshing = true;
+            try {
+              final refreshed = await _refreshToken();
+              if (refreshed) {
+                final token = await getAccessToken();
+                error.requestOptions.headers['Authorization'] = 'Bearer $token';
+                final response = await _dio.fetch(error.requestOptions);
+                return handler.resolve(response);
+              }
+            } finally {
+              _isRefreshing = false;
             }
           }
           return handler.next(error);
         },
       ),
     );
+  }
+
+  bool _isAuthEndpoint(String path) {
+    return path.contains(ApiConstants.authEndpoint);
   }
 
   Future<String?> getAccessToken() async {

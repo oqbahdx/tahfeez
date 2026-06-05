@@ -178,6 +178,82 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noClassesFound => 'No classes found';
 
   @override
+  String get noClassesFoundSubtitle =>
+      'No classes yet. Tap + to add your first class.';
+
+  @override
+  String get addClassSubtitle => 'Create a new class';
+
+  @override
+  String get classNameHint => 'e.g. Quran Class A';
+
+  @override
+  String get classTypePlaceholder => 'Select type';
+
+  @override
+  String get classModePlaceholder => 'Select mode';
+
+  @override
+  String get submitting => 'Submitting...';
+
+  @override
+  String get emailRequired => 'Email is required';
+
+  @override
+  String get invalidEmail => 'Enter a valid email address';
+
+  @override
+  String get passwordRequired => 'Password is required';
+
+  @override
+  String get usernameRequired => 'Username is required';
+
+  @override
+  String get usernameMinLength => 'Username must be at least 3 characters';
+
+  @override
+  String get usernameInvalidChars =>
+      'Username can only contain letters, numbers, and underscores';
+
+  @override
+  String get fullNameRequired => 'Full name is required';
+
+  @override
+  String get fullNameMinLength => 'Full name must be at least 2 characters';
+
+  @override
+  String get passwordComplexity =>
+      'Password must be 8+ chars with uppercase, lowercase, and a special character';
+
+  @override
+  String get confirmPasswordRequired => 'Confirm password is required';
+
+  @override
+  String get failedToLoadClasses => 'Failed to load classes';
+
+  @override
+  String get checkConnectionAndRetry => 'Check your connection and try again.';
+
+  @override
+  String get classNameTooLong => 'Class name is too long';
+
+  @override
+  String get manageStaffPayroll => 'Manage staff payroll and payments.';
+
+  @override
+  String get forOctober2023 => 'For October 2023';
+
+  @override
+  String staffMembersCount(Object count) {
+    return '$count Staff Members';
+  }
+
+  @override
+  String studentsListCount(int count) {
+    return '$count Students';
+  }
+
+  @override
   String classesCount(int count) {
     return '$count classes';
   }

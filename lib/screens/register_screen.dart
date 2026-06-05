@@ -90,34 +90,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final confirmPassword = _confirmPasswordController.text;
 
     if (userName.isEmpty) {
-      userNameErr = '${l10n.username} is required';
+      userNameErr = l10n.usernameRequired;
     } else if (userName.length < 3) {
-      userNameErr = 'Username must be at least 3 characters';
+      userNameErr = l10n.usernameMinLength;
     } else if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(userName)) {
-      userNameErr = 'Username can only contain letters, numbers, and underscores';
+      userNameErr = l10n.usernameInvalidChars;
     }
 
     if (fullName.isEmpty) {
-      fullNameErr = '${l10n.fullName} is required';
+      fullNameErr = l10n.fullNameRequired;
     } else if (fullName.length < 2) {
-      fullNameErr = 'Full name must be at least 2 characters';
+      fullNameErr = l10n.fullNameMinLength;
     }
 
     if (email.isEmpty) {
-      emailErr = '${l10n.emailAddress} is required';
+      emailErr = l10n.emailRequired;
     } else if (!RegExp(r'^[\w.+\-]+@[\w\-]+\.[a-zA-Z]{2,}$').hasMatch(email)) {
-      emailErr = 'Enter a valid email address';
+      emailErr = l10n.invalidEmail;
     }
 
     if (password.isEmpty) {
-      passwordErr = '${l10n.password} is required';
+      passwordErr = l10n.passwordRequired;
     } else if (!_passwordValid) {
-      passwordErr =
-          'Password must be 8+ chars with uppercase, lowercase, and a special character';
+      passwordErr = l10n.passwordComplexity;
     }
 
     if (confirmPassword.isEmpty) {
-      confirmPasswordErr = '${l10n.confirmPassword} is required';
+      confirmPasswordErr = l10n.confirmPasswordRequired;
     } else if (password != confirmPassword) {
       confirmPasswordErr = l10n.passwordsDoNotMatch;
     }

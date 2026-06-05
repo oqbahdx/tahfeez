@@ -153,8 +153,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.language_outlined,
               title: l10n.language,
               subtitle: Localizations.localeOf(context).languageCode == 'ar'
-                  ? 'العربية'
-                  : 'English',
+                  ? l10n.languageArabic
+                  : l10n.languageEnglish,
               onTap: () {
                 final currentLocale = Localizations.localeOf(context);
                 final newLocale = currentLocale.languageCode == 'en'

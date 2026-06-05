@@ -79,28 +79,57 @@ class _ClassesScreenState extends State<ClassesScreen> {
     final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: Text(l10n.deleteClass),
-          content: Text(l10n.deleteClassConfirmation(classEntity.name)),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                context.read<ClassBloc>().add(DeleteClassEvent(classEntity.id));
-              },
-              style: FilledButton.styleFrom(
-                backgroundColor: TahfeezColors.error,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: TahfeezColors.error.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(l10n.delete),
+              child: const Icon(
+                Icons.delete_outline_rounded,
+                color: TahfeezColors.error,
+                size: 20,
+              ),
             ),
+            const SizedBox(width: 12),
+            Text(l10n.deleteClass),
           ],
-        );
-      },
+        ),
+        content: Text(l10n.deleteClassConfirmation(classEntity.name)),
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actions: [
+          OutlinedButton(
+            onPressed: () => Navigator.pop(ctx),
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              context
+                  .read<ClassBloc>()
+                  .add(DeleteClassEvent(classEntity.id));
+            },
+            style: FilledButton.styleFrom(
+              backgroundColor: TahfeezColors.error,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
     );
   }
 
@@ -137,72 +166,162 @@ class _ClassesScreenState extends State<ClassesScreen> {
 
         return Scaffold(
           backgroundColor: TahfeezColors.background,
-          appBar: AppBar(
-            title: Text(
-              l10n.classesManagement,
-              style: TahfeezTextStyles.headlineLg.copyWith(
-                color: TahfeezColors.onSurface,
-                fontSize: 22,
-              ),
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: TahfeezColors.onSurfaceVariant,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: _onSearchChanged,
-                  decoration: InputDecoration(
-                    hintText: l10n.searchClasses,
-                    prefixIcon: const Icon(Icons.search),
-                    filled: true,
-                    fillColor: TahfeezColors.surfaceContainerLowest,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
+          body: SafeArea(
+            child: Column(
+              children: [
+                // Custom header section
+                _buildHeader(l10n, displayClasses, hasData),
+                // Search bar
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: _onSearchChanged,
+                    style: TahfeezTextStyles.bodyMd.copyWith(
+                      color: TahfeezColors.onSurface,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                    decoration: InputDecoration(
+                      hintText: l10n.searchClasses,
+                      hintStyle: TahfeezTextStyles.bodyMd.copyWith(
+                        color: TahfeezColors.onSurfaceVariant,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search_rounded,
+                        color: TahfeezColors.onSurfaceVariant,
+                        size: 20,
+                      ),
+                      filled: true,
+                      fillColor: TahfeezColors.surfaceContainerLowest,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide(
+                          color: TahfeezColors.surfaceContainer,
+                          width: 1,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide(
+                          color: TahfeezColors.surfaceContainer,
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide(
+                          color: TahfeezColors.primary.withOpacity(0.5),
+                          width: 1.5,
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: _buildBody(
-                  l10n,
-                  showInitialLoading,
-                  initialError,
-                  hasData,
-                  displayClasses,
-                  isLoading && hasData,
+                Expanded(
+                  child: _buildBody(
+                    l10n,
+                    showInitialLoading,
+                    initialError,
+                    hasData,
+                    displayClasses,
+                    isLoading && hasData,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           floatingActionButton: _isPrivileged
-              ? FloatingActionButton(
+              ? FloatingActionButton.extended(
                   onPressed: _navigateToAddClass,
                   backgroundColor: TahfeezColors.primary,
                   foregroundColor: TahfeezColors.onPrimary,
+                  elevation: 3,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Icon(Icons.add, size: 28),
+                  icon: const Icon(Icons.add_rounded, size: 22),
+                  label: Text(
+                    l10n.addClassTitle,
+                    style: TahfeezTextStyles.labelLg.copyWith(
+                      color: TahfeezColors.onPrimary,
+                    ),
+                  ),
                 )
               : null,
         );
       },
+    );
+  }
+
+  Widget _buildHeader(
+    AppLocalizations l10n,
+    List<ClassEntity> classes,
+    bool hasData,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.classesManagement,
+                  style: TahfeezTextStyles.headlineLg.copyWith(
+                    color: TahfeezColors.onSurface,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                if (hasData && classes.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: TahfeezColors.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      l10n.classesCount(classes.length),
+                      style: TahfeezTextStyles.labelMd.copyWith(
+                        color: TahfeezColors.primary,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          // Notification icon
+          Container(
+            decoration: BoxDecoration(
+              color: TahfeezColors.surfaceContainerLowest,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: TahfeezColors.surfaceContainer,
+                width: 1,
+              ),
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: TahfeezColors.onSurfaceVariant,
+                size: 22,
+              ),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -221,28 +340,55 @@ class _ClassesScreenState extends State<ClassesScreen> {
     if (hasError && !hasData) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.all(40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: TahfeezColors.error.withOpacity(0.7),
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: TahfeezColors.error.withOpacity(0.08),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.wifi_off_rounded,
+                  size: 36,
+                  color: TahfeezColors.error.withOpacity(0.7),
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               Text(
-                'Failed to load classes',
+                l10n.failedToLoadClasses,
                 style: TahfeezTextStyles.titleLg.copyWith(
-                  color: TahfeezColors.error,
+                  color: TahfeezColors.onSurface,
+                  fontWeight: FontWeight.w600,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              Text(
+                l10n.checkConnectionAndRetry,
+                style: TahfeezTextStyles.bodyMd.copyWith(
+                  color: TahfeezColors.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
               FilledButton.icon(
                 onPressed: () =>
                     context.read<ClassBloc>().add(GetAllClassesEvent()),
-                icon: const Icon(Icons.refresh, size: 18),
+                style: FilledButton.styleFrom(
+                  backgroundColor: TahfeezColors.primary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: const Icon(Icons.refresh_rounded, size: 18),
                 label: Text(l10n.retry),
               ),
             ],
@@ -259,33 +405,17 @@ class _ClassesScreenState extends State<ClassesScreen> {
 
     return RefreshIndicator(
       onRefresh: _onRefresh,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            child: Text(
-              l10n.classesCount(displayClasses.length),
-              style: TahfeezTextStyles.titleLg.copyWith(
-                color: TahfeezColors.onSurface,
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 80),
-              itemCount: displayClasses.length,
-              itemBuilder: (context, i) => ClassCard(
-                classEntity: displayClasses[i],
-                showDelete: _isPrivileged,
-                deleteDisabled: isRefreshing,
-                onTap: () {},
-                onDelete: () =>
-                    _showDeleteConfirmation(displayClasses[i]),
-              ),
-            ),
-          ),
-        ],
+      color: TahfeezColors.primary,
+      child: ListView.builder(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+        itemCount: displayClasses.length,
+        itemBuilder: (context, i) => ClassCard(
+          classEntity: displayClasses[i],
+          showDelete: _isPrivileged,
+          deleteDisabled: isRefreshing,
+          onTap: () {},
+          onDelete: () => _showDeleteConfirmation(displayClasses[i]),
+        ),
       ),
     );
   }

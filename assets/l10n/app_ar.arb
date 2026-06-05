@@ -64,6 +64,34 @@
   "classDeleted": "تم حذف الفصل بنجاح!",
   "retry": "إعادة المحاولة",
   "noClassesFound": "لا توجد فصول",
+  "noClassesFoundSubtitle": "لا توجد فصول بعد. اضغط + لإضافة أول فصل.",
+  "addClassSubtitle": "إنشاء فصل جديد",
+  "classNameHint": "مثال: فصل القرآن أ",
+  "classTypePlaceholder": "اختر النوع",
+  "classModePlaceholder": "اختر الوضع",
+  "submitting": "جارٍ الإرسال...",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "invalidEmail": "أدخل بريداً إلكترونياً صحيحاً",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "usernameRequired": "اسم المستخدم مطلوب",
+  "usernameMinLength": "يجب أن يتكون اسم المستخدم من 3 أحرف على الأقل",
+  "usernameInvalidChars": "يمكن أن يحتوي اسم المستخدم على أحرف وأرقام وشرطات سفلية فقط",
+  "fullNameRequired": "الاسم الكامل مطلوب",
+  "fullNameMinLength": "يجب أن يتكون الاسم الكامل من حرفين على الأقل",
+  "passwordComplexity": "يجب أن تحتوي كلمة المرور على 8 أحرف كبيرة وصغيرة ورمز خاص",
+  "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
+  "failedToLoadClasses": "فشل تحميل الفصول",
+  "checkConnectionAndRetry": "تحقق من اتصالك وحاول مرة أخرى.",
+  "classNameTooLong": "اسم الفصل طويل جداً",
+  "manageStaffPayroll": "إدارة رواتب الموظفين والمدفوعات.",
+  "forOctober2023": "لشهر أكتوبر 2023",
+  "staffMembersCount": "{count} موظف",
+  "studentsListCount": "{count} طالب",
+  "@studentsListCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "classesCount": "{count} فصل",
   "@classesCount": {
     "placeholders": {

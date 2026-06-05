@@ -176,6 +176,84 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noClassesFound => 'لا توجد فصول';
 
   @override
+  String get noClassesFoundSubtitle =>
+      'لا توجد فصول بعد. اضغط + لإضافة أول فصل.';
+
+  @override
+  String get addClassSubtitle => 'إنشاء فصل جديد';
+
+  @override
+  String get classNameHint => 'مثال: فصل القرآن أ';
+
+  @override
+  String get classTypePlaceholder => 'اختر النوع';
+
+  @override
+  String get classModePlaceholder => 'اختر الوضع';
+
+  @override
+  String get submitting => 'جارٍ الإرسال...';
+
+  @override
+  String get emailRequired => 'البريد الإلكتروني مطلوب';
+
+  @override
+  String get invalidEmail => 'أدخل بريداً إلكترونياً صحيحاً';
+
+  @override
+  String get passwordRequired => 'كلمة المرور مطلوبة';
+
+  @override
+  String get usernameRequired => 'اسم المستخدم مطلوب';
+
+  @override
+  String get usernameMinLength =>
+      'يجب أن يتكون اسم المستخدم من 3 أحرف على الأقل';
+
+  @override
+  String get usernameInvalidChars =>
+      'يمكن أن يحتوي اسم المستخدم على أحرف وأرقام وشرطات سفلية فقط';
+
+  @override
+  String get fullNameRequired => 'الاسم الكامل مطلوب';
+
+  @override
+  String get fullNameMinLength =>
+      'يجب أن يتكون الاسم الكامل من حرفين على الأقل';
+
+  @override
+  String get passwordComplexity =>
+      'يجب أن تحتوي كلمة المرور على 8 أحرف كبيرة وصغيرة ورمز خاص';
+
+  @override
+  String get confirmPasswordRequired => 'تأكيد كلمة المرور مطلوب';
+
+  @override
+  String get failedToLoadClasses => 'فشل تحميل الفصول';
+
+  @override
+  String get checkConnectionAndRetry => 'تحقق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String get classNameTooLong => 'اسم الفصل طويل جداً';
+
+  @override
+  String get manageStaffPayroll => 'إدارة رواتب الموظفين والمدفوعات.';
+
+  @override
+  String get forOctober2023 => 'لشهر أكتوبر 2023';
+
+  @override
+  String staffMembersCount(Object count) {
+    return '$count موظف';
+  }
+
+  @override
+  String studentsListCount(int count) {
+    return '$count طالب';
+  }
+
+  @override
   String classesCount(int count) {
     return '$count فصل';
   }

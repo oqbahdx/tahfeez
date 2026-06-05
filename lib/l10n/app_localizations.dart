@@ -422,6 +422,144 @@ abstract class AppLocalizations {
   /// **'No classes found'**
   String get noClassesFound;
 
+  /// No description provided for @noClassesFoundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No classes yet. Tap + to add your first class.'**
+  String get noClassesFoundSubtitle;
+
+  /// No description provided for @addClassSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new class'**
+  String get addClassSubtitle;
+
+  /// No description provided for @classNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Quran Class A'**
+  String get classNameHint;
+
+  /// No description provided for @classTypePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Select type'**
+  String get classTypePlaceholder;
+
+  /// No description provided for @classModePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Select mode'**
+  String get classModePlaceholder;
+
+  /// No description provided for @submitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting...'**
+  String get submitting;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailRequired;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get invalidEmail;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordRequired;
+
+  /// No description provided for @usernameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Username is required'**
+  String get usernameRequired;
+
+  /// No description provided for @usernameMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Username must be at least 3 characters'**
+  String get usernameMinLength;
+
+  /// No description provided for @usernameInvalidChars.
+  ///
+  /// In en, this message translates to:
+  /// **'Username can only contain letters, numbers, and underscores'**
+  String get usernameInvalidChars;
+
+  /// No description provided for @fullNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name is required'**
+  String get fullNameRequired;
+
+  /// No description provided for @fullNameMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name must be at least 2 characters'**
+  String get fullNameMinLength;
+
+  /// No description provided for @passwordComplexity.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be 8+ chars with uppercase, lowercase, and a special character'**
+  String get passwordComplexity;
+
+  /// No description provided for @confirmPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password is required'**
+  String get confirmPasswordRequired;
+
+  /// No description provided for @failedToLoadClasses.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load classes'**
+  String get failedToLoadClasses;
+
+  /// No description provided for @checkConnectionAndRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection and try again.'**
+  String get checkConnectionAndRetry;
+
+  /// No description provided for @classNameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Class name is too long'**
+  String get classNameTooLong;
+
+  /// No description provided for @manageStaffPayroll.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage staff payroll and payments.'**
+  String get manageStaffPayroll;
+
+  /// No description provided for @forOctober2023.
+  ///
+  /// In en, this message translates to:
+  /// **'For October 2023'**
+  String get forOctober2023;
+
+  /// No description provided for @staffMembersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Staff Members'**
+  String staffMembersCount(Object count);
+
+  /// No description provided for @studentsListCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Students'**
+  String studentsListCount(int count);
+
   /// No description provided for @classesCount.
   ///
   /// In en, this message translates to:

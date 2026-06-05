@@ -290,19 +290,20 @@ class _StudentCard extends StatelessWidget {
     }
   }
 
-  String get _statusLabel {
+  String _statusLabel(AppLocalizations l10n) {
     switch (student.status) {
       case 'excellent':
-        return 'Excellent';
+        return l10n.filterChipsExcellent;
       case 'needsWork':
-        return 'Needs Work';
+        return l10n.filterChipsNeedsWork;
       default:
-        return 'Good';
+        return l10n.filterChipsGood;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -359,7 +360,7 @@ class _StudentCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          _statusLabel,
+                          _statusLabel(l10n),
                           style: TahfeezTextStyles.labelMd.copyWith(
                             color: _statusColor,
                             fontSize: 10,
@@ -420,9 +421,9 @@ class _StudentCard extends StatelessWidget {
                 size: 20,
               ),
               itemBuilder: (_) => [
-                PopupMenuItem(value: 'log', child: Text('Log Recitation')),
-                PopupMenuItem(value: 'history', child: Text('View History')),
-                PopupMenuItem(value: 'attendance', child: Text('Attendance')),
+                PopupMenuItem(value: 'log', child: Text(l10n.logRecitation)),
+                PopupMenuItem(value: 'history', child: Text(l10n.viewHistory)),
+                PopupMenuItem(value: 'attendance', child: Text(l10n.attendance)),
               ],
             ),
           ],
