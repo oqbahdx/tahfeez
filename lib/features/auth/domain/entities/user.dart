@@ -36,12 +36,3 @@ class User extends Equatable {
     status,
   ];
 }
-
-class UserRole {
-  static const String student = 'Student';
-  static const String teacher = 'Teacher';
-  static const String assistant = 'Assistant';
-  static const String supervisor = 'Supervisor';
-  static const String accountant = 'Accountant';
-  static const String admin = 'Admin';
-}

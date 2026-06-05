@@ -81,6 +81,7 @@
   "passwordComplexity": "Password must be 8+ chars with uppercase, lowercase, and a special character",
   "confirmPasswordRequired": "Confirm password is required",
   "failedToLoadClasses": "Failed to load classes",
+  "failedToLoadStudents": "Failed to load students",
   "checkConnectionAndRetry": "Check your connection and try again.",
   "classNameTooLong": "Class name is too long",
   "manageStaffPayroll": "Manage staff payroll and payments.",
@@ -110,6 +111,14 @@
   "searchStudents": "Search students...",
   "allStudents": "All Students",
   "addStudentBtn": "Add Student",
+  "noStudentsFound": "No students found",
+  "pending": "Pending",
+  "joinedDate": "Joined {date}",
+  "@joinedDate": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
   "reports": "Reports",
   "settings": "Settings",
   "institution": "Institution",

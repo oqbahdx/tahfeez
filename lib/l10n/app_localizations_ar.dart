@@ -232,6 +232,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get failedToLoadClasses => 'فشل تحميل الفصول';
 
   @override
+  String get failedToLoadStudents => 'فشل تحميل الطلاب';
+
+  @override
   String get checkConnectionAndRetry => 'تحقق من اتصالك وحاول مرة أخرى.';
 
   @override
@@ -280,6 +283,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addStudentBtn => 'إضافة طالب';
+
+  @override
+  String get noStudentsFound => 'لم يتم العثور على طلاب';
+
+  @override
+  String get pending => 'معلق';
+
+  @override
+  String joinedDate(String date) {
+    return 'تاريخ الانضمام $date';
+  }
 
   @override
   String get reports => 'التقارير';

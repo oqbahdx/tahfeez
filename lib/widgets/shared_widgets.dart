@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import '../theme/tahfeez_theme.dart';
 import '../l10n/app_localizations.dart';
 
+class NavItemData {
+  final IconData icon;
+  final String label;
+
+  const NavItemData(this.icon, this.label);
+}
+
 class StatCard extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -202,22 +209,20 @@ class TahfeezChip extends StatelessWidget {
 class TahfeezDrawer extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
+  final List<NavItemData>? items;
 
   const TahfeezDrawer({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.items,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final dashboard = l10n?.dashboard ?? 'Dashboard';
-    final classes = l10n?.classes ?? 'Classes';
-    final students = l10n?.students ?? 'Students';
-    final reports = l10n?.reports ?? 'Reports';
-    final settings = l10n?.settings ?? 'Settings';
     final appTitle = l10n?.appTitle ?? 'Tahfeez';
+    final drawerItems = items ?? _defaultItems(l10n);
 
     return Container(
       color: TahfeezColors.surfaceContainerLowest,
@@ -254,42 +259,29 @@ class TahfeezDrawer extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
-                _DrawerItem(
-                  icon: Icons.dashboard_outlined,
-                  label: dashboard,
-                  isSelected: currentIndex == 0,
-                  onTap: () => onTap(0),
-                ),
-                _DrawerItem(
-                  icon: Icons.school_outlined,
-                  label: classes,
-                  isSelected: currentIndex == 1,
-                  onTap: () => onTap(1),
-                ),
-                _DrawerItem(
-                  icon: Icons.people_outline,
-                  label: students,
-                  isSelected: currentIndex == 2,
-                  onTap: () => onTap(2),
-                ),
-                _DrawerItem(
-                  icon: Icons.analytics_outlined,
-                  label: reports,
-                  isSelected: currentIndex == 3,
-                  onTap: () => onTap(3),
-                ),
-                _DrawerItem(
-                  icon: Icons.settings_outlined,
-                  label: settings,
-                  isSelected: currentIndex == 4,
-                  onTap: () => onTap(4),
-                ),
+                for (var i = 0; i < drawerItems.length; i++)
+                  _DrawerItem(
+                    icon: drawerItems[i].icon,
+                    label: drawerItems[i].label,
+                    isSelected: currentIndex == i,
+                    onTap: () => onTap(i),
+                  ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  List<NavItemData> _defaultItems(AppLocalizations? l10n) {
+    return [
+      NavItemData(Icons.dashboard_outlined, l10n?.dashboard ?? 'Dashboard'),
+      NavItemData(Icons.school_outlined, l10n?.classes ?? 'Classes'),
+      NavItemData(Icons.people_outline, l10n?.students ?? 'Students'),
+      NavItemData(Icons.analytics_outlined, l10n?.reports ?? 'Reports'),
+      NavItemData(Icons.settings_outlined, l10n?.settings ?? 'Settings'),
+    ];
   }
 }
 
@@ -335,20 +327,19 @@ class _DrawerItem extends StatelessWidget {
 class TahfeezBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
+  final List<NavItemData>? items;
 
   const TahfeezBottomNav({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.items,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final classes = l10n?.classes ?? 'Classes';
-    final students = l10n?.students ?? 'Students';
-    final reports = l10n?.reports ?? 'Reports';
-    final settings = l10n?.settings ?? 'Settings';
+    final navItems = items ?? _defaultItems(l10n);
 
     return NavigationBar(
       selectedIndex: currentIndex,
@@ -356,33 +347,22 @@ class TahfeezBottomNav extends StatelessWidget {
       backgroundColor: TahfeezColors.surfaceContainerLowest,
       indicatorColor: TahfeezColors.primaryContainer.withOpacity(0.3),
       destinations: [
-        NavigationDestination(
-          icon: const Icon(Icons.school_outlined),
-          selectedIcon: const Icon(Icons.school, color: TahfeezColors.primary),
-          label: classes,
-        ),
-        NavigationDestination(
-          icon: const Icon(Icons.people_outline),
-          selectedIcon: const Icon(Icons.people, color: TahfeezColors.primary),
-          label: students,
-        ),
-        NavigationDestination(
-          icon: const Icon(Icons.analytics_outlined),
-          selectedIcon: const Icon(
-            Icons.analytics,
-            color: TahfeezColors.primary,
+        for (final item in navItems)
+          NavigationDestination(
+            icon: Icon(item.icon),
+            selectedIcon: Icon(item.icon, color: TahfeezColors.primary),
+            label: item.label,
           ),
-          label: reports,
-        ),
-        NavigationDestination(
-          icon: const Icon(Icons.settings_outlined),
-          selectedIcon: const Icon(
-            Icons.settings,
-            color: TahfeezColors.primary,
-          ),
-          label: settings,
-        ),
       ],
     );
+  }
+
+  List<NavItemData> _defaultItems(AppLocalizations? l10n) {
+    return [
+      NavItemData(Icons.school_outlined, l10n?.classes ?? 'Classes'),
+      NavItemData(Icons.people_outline, l10n?.students ?? 'Students'),
+      NavItemData(Icons.analytics_outlined, l10n?.reports ?? 'Reports'),
+      NavItemData(Icons.settings_outlined, l10n?.settings ?? 'Settings'),
+    ];
   }
 }

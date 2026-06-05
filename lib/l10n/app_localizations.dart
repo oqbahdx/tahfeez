@@ -524,6 +524,12 @@ abstract class AppLocalizations {
   /// **'Failed to load classes'**
   String get failedToLoadClasses;
 
+  /// No description provided for @failedToLoadStudents.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load students'**
+  String get failedToLoadStudents;
+
   /// No description provided for @checkConnectionAndRetry.
   ///
   /// In en, this message translates to:
@@ -607,6 +613,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Student'**
   String get addStudentBtn;
+
+  /// No description provided for @noStudentsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No students found'**
+  String get noStudentsFound;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @joinedDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined {date}'**
+  String joinedDate(String date);
 
   /// No description provided for @reports.
   ///
