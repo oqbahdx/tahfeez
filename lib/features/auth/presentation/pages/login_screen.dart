@@ -325,7 +325,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.mail_outlined,
                 color: TahfeezColors.outline,
               ),
-              hintText: 'admin@institute.edu',
+              hintText: 'admin@domain.com',
               errorText: _emailError,
             ),
           ),

@@ -5,11 +5,12 @@ import '../features/auth/domain/entities/user.dart';
 import '../features/student/presentation/blocs/student_bloc.dart';
 import '../features/student/presentation/widgets/student_shimmer.dart';
 import '../features/student/presentation/blocs/student_event.dart';
+import '../features/recitation/presentation/blocs/recitation_bloc.dart';
 import '../features/student/presentation/blocs/student_state.dart';
 import '../theme/tahfeez_theme.dart';
 import '../l10n/app_localizations.dart';
-import 'recitation_history_screen.dart';
-import 'log_recitation_screen.dart';
+import '../features/recitation/presentation/pages/log_recitation_page.dart';
+import '../features/recitation/presentation/pages/recitation_history_page.dart';
 
 enum _StudentFilter { all, active, pending }
 
@@ -201,6 +202,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
           ),
           floatingActionButton: hasData && allStudents.isNotEmpty
               ? FloatingActionButton.extended(
+                  heroTag: 'students_fab',
                   onPressed: () {},
                   backgroundColor: TahfeezColors.primary,
                   foregroundColor: TahfeezColors.onPrimary,
@@ -339,18 +341,66 @@ class _StudentsScreenState extends State<StudentsScreen> {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => RecitationHistoryScreen(
-                studentName: displayStudents[i].fullName ?? '',
+              builder: (_) => BlocProvider.value(
+                value: context.read<RecitationBloc>(),
+                child: RecitationHistoryPage(
+                  studentId: displayStudents[i].id,
+                  studentName: displayStudents[i].fullName ?? '',
+                ),
               ),
             ),
           ),
           onLogRecitation: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const LogRecitationScreen(),
+              builder: (_) => BlocProvider.value(
+                value: context.read<RecitationBloc>(),
+                child: LogRecitationPage(
+                  studentId: displayStudents[i].id,
+                  studentName: displayStudents[i].fullName ?? '',
+                ),
+              ),
             ),
           ),
+          onActivate: displayStudents[i].status != 'Active'
+              ? () => _confirmActivate(context, displayStudents[i])
+              : null,
         ),
+      ),
+    );
+  }
+
+  void _confirmActivate(BuildContext context, User student) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: TahfeezColors.surfaceContainerLowest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(l10n.activateStudentConfirm,
+          style: TahfeezTextStyles.titleLg.copyWith(color: TahfeezColors.onSurface),
+        ),
+        content: Text(l10n.activateStudentConfirmSubtitle,
+          style: TahfeezTextStyles.bodyMd.copyWith(color: TahfeezColors.onSurfaceVariant),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel,
+              style: TahfeezTextStyles.labelLg.copyWith(color: TahfeezColors.onSurfaceVariant),
+            ),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              context.read<StudentBloc>().add(ActivateStudentEvent(student.id));
+            },
+            style: FilledButton.styleFrom(backgroundColor: TahfeezColors.primary),
+            child: Text(l10n.activate,
+              style: TahfeezTextStyles.labelLg.copyWith(color: TahfeezColors.onPrimary),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -360,11 +410,13 @@ class _StudentCard extends StatelessWidget {
   final User student;
   final VoidCallback onTap;
   final VoidCallback onLogRecitation;
+  final VoidCallback? onActivate;
 
   const _StudentCard({
     required this.student,
     required this.onTap,
     required this.onLogRecitation,
+    this.onActivate,
   });
 
   String get _initials {
@@ -481,6 +533,7 @@ class _StudentCard extends StatelessWidget {
               onSelected: (v) {
                 if (v == 'log') onLogRecitation();
                 if (v == 'history') onTap();
+                if (v == 'activate') onActivate?.call();
               },
               icon: const Icon(
                 Icons.more_vert,
@@ -490,6 +543,13 @@ class _StudentCard extends StatelessWidget {
               itemBuilder: (_) => [
                 PopupMenuItem(value: 'log', child: Text(l10n.logRecitation)),
                 PopupMenuItem(value: 'history', child: Text(l10n.viewHistory)),
+                if (onActivate != null)
+                  PopupMenuItem(
+                    value: 'activate',
+                    child: Text(l10n.activate,
+                      style: const TextStyle(color: TahfeezColors.primary),
+                    ),
+                  ),
                 PopupMenuItem(
                     value: 'attendance', child: Text(l10n.attendance)),
               ],

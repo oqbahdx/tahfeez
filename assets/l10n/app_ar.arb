@@ -4,7 +4,7 @@
   "welcomeBack": "مرحباً بعودتك",
   "pleaseSignIn": "يرجى تسجيل الدخول للوصول إلى لوحة التحكم المؤسسية.",
   "emailAddress": "البريد الإلكتروني",
-  "emailHint": "admin@institute.edu",
+  "emailHint": "admin@domain.com",
   "password": "كلمة المرور",
   "passwordHint": "أدخل كلمة المرور",
   "forgotPassword": "هل نسيت كلمة المرور؟",
@@ -285,5 +285,21 @@
   "passwordRuleUppercase": "حرف كبير",
   "passwordRuleLowercase": "حرف صغير",
   "passwordRuleSpecialChar": "رمز خاص",
-  "roleParent": "ولي أمر"
+  "roleParent": "ولي أمر",
+  "ayahsCount": "عدد الآيات",
+  "ayahsCountText": "{count} آيات",
+  "@ayahsCountText": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "noRecitationsFound": "لم يتم العثور على تسميعات",
+  "noRecitationsFoundSubtitle": "ابدأ بتسجيل تسميع",
+  "failedToLoadRecitations": "فشل تحميل سجل التسميع",
+  "ayahsRequired": "عدد الآيات مطلوب",
+  "ayahsInvalid": "الرجاء إدخال رقم صحيح",
+  "teacherRequired": "معلومات المعلم مطلوبة",
+  "activate": "تفعيل",
+  "activateStudentConfirm": "تفعيل هذا الطالب؟",
+  "activateStudentConfirmSubtitle": "سيتم منح الطالب حق الوصول إلى النظام."
 }

@@ -23,4 +23,18 @@ class StudentRepositoryImpl implements StudentRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, User>> activateStudent(String studentId) async {
+    try {
+      final result = await remoteDataSource.activateStudent(studentId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

@@ -4,7 +4,7 @@
   "welcomeBack": "Welcome Back",
   "pleaseSignIn": "Please sign in to access your institutional dashboard.",
   "emailAddress": "Email Address",
-  "emailHint": "admin@institute.edu",
+  "emailHint": "admin@domain.com",
   "password": "Password",
   "passwordHint": "Enter your password",
   "forgotPassword": "Forgot Password?",
@@ -285,5 +285,21 @@
   "passwordRuleUppercase": "Uppercase",
   "passwordRuleLowercase": "Lowercase",
   "passwordRuleSpecialChar": "Special char",
-  "roleParent": "Parent"
+  "roleParent": "Parent",
+  "ayahsCount": "Number of Ayahs",
+  "ayahsCountText": "{count} ayahs",
+  "@ayahsCountText": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "noRecitationsFound": "No recitations found",
+  "noRecitationsFoundSubtitle": "Start by logging a recitation.",
+  "failedToLoadRecitations": "Failed to load recitations",
+  "ayahsRequired": "Number of ayahs is required",
+  "ayahsInvalid": "Please enter a valid number of ayahs",
+  "teacherRequired": "Teacher information is required",
+  "activate": "Activate",
+  "activateStudentConfirm": "Activate this student?",
+  "activateStudentConfirmSubtitle": "This will grant the student access to the system."
 }

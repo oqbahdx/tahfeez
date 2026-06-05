@@ -19,3 +19,12 @@ class SearchStudentsEvent extends StudentEvent {
   @override
   List<Object?> get props => [query];
 }
+
+class ActivateStudentEvent extends StudentEvent {
+  final String studentId;
+
+  const ActivateStudentEvent(this.studentId);
+
+  @override
+  List<Object?> get props => [studentId];
+}

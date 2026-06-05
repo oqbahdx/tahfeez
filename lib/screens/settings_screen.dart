@@ -69,7 +69,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                         Text(
-                          'admin@tahfeez.edu',
+                          'admin@domain.com',
                           style: TahfeezTextStyles.bodyMd.copyWith(
                             color: TahfeezColors.onSurfaceVariant,
                           ),

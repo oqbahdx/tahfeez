@@ -6,6 +6,7 @@ import '../../../auth/domain/enums/user_role.dart';
 
 abstract class StudentRemoteDataSource {
   Future<List<UserModel>> getStudents();
+  Future<UserModel> activateStudent(String studentId);
 }
 
 class StudentRemoteDataSourceImpl implements StudentRemoteDataSource {
@@ -26,6 +27,26 @@ class StudentRemoteDataSourceImpl implements StudentRemoteDataSource {
           .whereType<Map<String, dynamic>>()
           .map((e) => UserModel.fromJson(e))
           .toList();
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel> activateStudent(String studentId) async {
+    try {
+      final response = await apiClient.post(
+        '${ApiConstants.studentsEndpoint}/$studentId/activate',
+      );
+      final raw = response['value'];
+      if (raw == null || raw is! Map<String, dynamic>) {
+        throw ServerException(message: 'Invalid response from server');
+      }
+      return UserModel.fromJson(raw);
     } on ServerException {
       rethrow;
     } on NetworkException {

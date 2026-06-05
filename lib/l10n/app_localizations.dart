@@ -125,7 +125,7 @@ abstract class AppLocalizations {
   /// No description provided for @emailHint.
   ///
   /// In en, this message translates to:
-  /// **'admin@institute.edu'**
+  /// **'admin@domain.com'**
   String get emailHint;
 
   /// No description provided for @password.
@@ -1543,6 +1543,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Parent'**
   String get roleParent;
+
+  /// No description provided for @ayahsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Ayahs'**
+  String get ayahsCount;
+
+  /// No description provided for @ayahsCountText.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} ayahs'**
+  String ayahsCountText(int count);
+
+  /// No description provided for @noRecitationsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No recitations found'**
+  String get noRecitationsFound;
+
+  /// No description provided for @noRecitationsFoundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start by logging a recitation.'**
+  String get noRecitationsFoundSubtitle;
+
+  /// No description provided for @failedToLoadRecitations.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load recitations'**
+  String get failedToLoadRecitations;
+
+  /// No description provided for @ayahsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of ayahs is required'**
+  String get ayahsRequired;
+
+  /// No description provided for @ayahsInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid number of ayahs'**
+  String get ayahsInvalid;
+
+  /// No description provided for @teacherRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Teacher information is required'**
+  String get teacherRequired;
+
+  /// No description provided for @activate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get activate;
+
+  /// No description provided for @activateStudentConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate this student?'**
+  String get activateStudentConfirm;
+
+  /// No description provided for @activateStudentConfirmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This will grant the student access to the system.'**
+  String get activateStudentConfirmSubtitle;
 }
 
 class _AppLocalizationsDelegate
