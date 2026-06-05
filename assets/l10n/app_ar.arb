@@ -81,6 +81,7 @@
   "passwordComplexity": "يجب أن تحتوي كلمة المرور على 8 أحرف كبيرة وصغيرة ورمز خاص",
   "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
   "failedToLoadClasses": "فشل تحميل الفصول",
+  "failedToLoadStudents": "فشل تحميل الطلاب",
   "checkConnectionAndRetry": "تحقق من اتصالك وحاول مرة أخرى.",
   "classNameTooLong": "اسم الفصل طويل جداً",
   "manageStaffPayroll": "إدارة رواتب الموظفين والمدفوعات.",
@@ -110,6 +111,14 @@
   "searchStudents": "البحث في الطلاب...",
   "allStudents": "كل الطلاب",
   "addStudentBtn": "إضافة طالب",
+  "noStudentsFound": "لم يتم العثور على طلاب",
+  "pending": "معلق",
+  "joinedDate": "تاريخ الانضمام {date}",
+  "@joinedDate": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
   "reports": "التقارير",
   "settings": "الإعدادات",
   "institution": "المؤسسة",

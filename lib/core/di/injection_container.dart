@@ -15,6 +15,12 @@ import '../../features/class/domain/repositories/class_repository.dart';
 import '../../features/class/domain/usecases/class_usecases.dart';
 import '../../features/class/presentation/blocs/class_bloc.dart';
 
+import '../../features/student/data/datasources/student_remote_datasource.dart';
+import '../../features/student/data/repositories/student_repository_impl.dart';
+import '../../features/student/domain/repositories/student_repository.dart';
+import '../../features/student/domain/usecases/get_students_usecase.dart';
+import '../../features/student/presentation/blocs/student_bloc.dart';
+
 import '../network/api_client.dart';
 
 final sl = GetIt.instance;
@@ -43,9 +49,13 @@ Future<void> init() async {
   sl.registerLazySingleton<ClassRemoteDataSource>(
     () => ClassRemoteDataSourceImpl(sl()),
   );
+  sl.registerLazySingleton<StudentRemoteDataSource>(
+    () => StudentRemoteDataSourceImpl(sl()),
+  );
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
   sl.registerLazySingleton<ClassRepository>(() => ClassRepositoryImpl(sl()));
+  sl.registerLazySingleton<StudentRepository>(() => StudentRepositoryImpl(sl()));
 
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
@@ -61,6 +71,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeleteClassUseCase(sl()));
   sl.registerLazySingleton(() => AssignStaffUseCase(sl()));
   sl.registerLazySingleton(() => GetUsersByRoleUseCase(sl()));
+
+  sl.registerLazySingleton(() => GetStudentsUseCase(sl()));
+
+  sl.registerFactory(() => StudentBloc(getStudentsUseCase: sl()));
 
   sl.registerFactory(
     () => AuthBloc(

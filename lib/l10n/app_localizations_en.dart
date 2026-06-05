@@ -232,6 +232,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToLoadClasses => 'Failed to load classes';
 
   @override
+  String get failedToLoadStudents => 'Failed to load students';
+
+  @override
   String get checkConnectionAndRetry => 'Check your connection and try again.';
 
   @override
@@ -280,6 +283,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addStudentBtn => 'Add Student';
+
+  @override
+  String get noStudentsFound => 'No students found';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String joinedDate(String date) {
+    return 'Joined $date';
+  }
 
   @override
   String get reports => 'Reports';
