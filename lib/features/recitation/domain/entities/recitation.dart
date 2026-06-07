@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../enums/recitation_type.dart';
 
 class Recitation extends Equatable {
   final String id;
@@ -8,7 +9,7 @@ class Recitation extends Equatable {
   final String? teacherName;
   final DateTime date;
   final int ayahsCount;
-  final String type;
+  final RecitationType type;
   final int grade;
   final String? gradeLabel;
   final String? notes;
@@ -27,18 +28,12 @@ class Recitation extends Equatable {
     this.notes,
   });
 
+  int get typeValue => type.value;
+  String get typeName => type.displayName;
+
   @override
   List<Object?> get props => [
-    id,
-    studentId,
-    studentName,
-    teacherId,
-    teacherName,
-    date,
-    ayahsCount,
-    type,
-    grade,
-    gradeLabel,
-    notes,
+    id, studentId, studentName, teacherId, teacherName,
+    date, ayahsCount, type, grade, gradeLabel, notes,
   ];
 }

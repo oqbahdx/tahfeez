@@ -143,20 +143,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFf9f9f8),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Row(
-            children: [
-              if (isWide) _buildBrandingPanel(context),
-              Expanded(
-                child: BlocProvider(
-                  create: (_) => sl<AuthBloc>(),
-                  child: _buildRegisterForm(context, l10n),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
+              children: [
+                if (isWide) _buildBrandingPanel(context),
+                Expanded(
+                  child: BlocProvider(
+                    create: (_) => sl<AuthBloc>(),
+                    child: _buildRegisterForm(context, l10n),
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }

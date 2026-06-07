@@ -8,6 +8,7 @@ import '../features/class/presentation/blocs/class_bloc.dart';
 import '../features/class/presentation/pages/classes_screen.dart';
 import '../features/student/presentation/blocs/student_bloc.dart';
 import '../features/student/presentation/blocs/student_event.dart';
+import '../features/recitation/presentation/blocs/recitation_bloc.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/shared_widgets.dart';
 import 'dashboard_screen.dart';
@@ -71,42 +72,45 @@ class _MainShellState extends State<MainShell> {
 
     return BlocProvider<ClassBloc>(
       create: (_) => di.sl<ClassBloc>(),
-      child: BlocProvider<StudentBloc>(
-        create: (_) => di.sl<StudentBloc>()..add(GetStudentsEvent()),
-        child: Scaffold(
-          drawer: isWide
-              ? null
-              : TahfeezDrawer(
-                  currentIndex: _currentIndex,
-                  onTap: (i) {
-                    setState(() => _currentIndex = i);
-                    Navigator.pop(context);
-                  },
-                  items: tabs,
-                ),
-          body: isWide
-              ? Row(
-                  children: [
-                    SizedBox(
-                      width: 320,
-                      child: TahfeezDrawer(
-                        currentIndex: _currentIndex,
-                        onTap: (i) => setState(() => _currentIndex = i),
-                        items: tabs,
+      child: BlocProvider<RecitationBloc>(
+        create: (_) => di.sl<RecitationBloc>(),
+        child: BlocProvider<StudentBloc>(
+          create: (_) => di.sl<StudentBloc>()..add(GetStudentsEvent()),
+          child: Scaffold(
+            drawer: isWide
+                ? null
+                : TahfeezDrawer(
+                    currentIndex: _currentIndex,
+                    onTap: (i) {
+                      setState(() => _currentIndex = i);
+                      Navigator.pop(context);
+                    },
+                    items: tabs,
+                  ),
+            body: isWide
+                ? Row(
+                    children: [
+                      SizedBox(
+                        width: 320,
+                        child: TahfeezDrawer(
+                          currentIndex: _currentIndex,
+                          onTap: (i) => setState(() => _currentIndex = i),
+                          items: tabs,
+                        ),
                       ),
-                    ),
-                    Expanded(child: _buildBody(tabs)),
-                  ],
-                )
-              : _buildBody(tabs),
-          bottomNavigationBar: isWide
-              ? null
-              : TahfeezBottomNav(
-                  currentIndex:
-                      _currentIndex > 0 ? _currentIndex - 1 : 0,
-                  onTap: (i) => setState(() => _currentIndex = i + 1),
-                  items: tabs.length > 1 ? tabs.sublist(1) : null,
-                ),
+                      Expanded(child: _buildBody(tabs)),
+                    ],
+                  )
+                : _buildBody(tabs),
+            bottomNavigationBar: isWide
+                ? null
+                : TahfeezBottomNav(
+                    currentIndex:
+                        _currentIndex > 0 ? _currentIndex - 1 : 0,
+                    onTap: (i) => setState(() => _currentIndex = i + 1),
+                    items: tabs.length > 1 ? tabs.sublist(1) : null,
+                  ),
+          ),
         ),
       ),
     );

@@ -19,7 +19,16 @@ import '../../features/student/data/datasources/student_remote_datasource.dart';
 import '../../features/student/data/repositories/student_repository_impl.dart';
 import '../../features/student/domain/repositories/student_repository.dart';
 import '../../features/student/domain/usecases/get_students_usecase.dart';
+import '../../features/student/domain/usecases/activate_student_usecase.dart';
 import '../../features/student/presentation/blocs/student_bloc.dart';
+
+import '../../features/recitation/data/datasources/recitation_remote_datasource.dart';
+import '../../features/recitation/data/repositories/recitation_repository_impl.dart';
+import '../../features/recitation/domain/repositories/recitation_repository.dart';
+import '../../features/recitation/domain/usecases/log_recitation_usecase.dart';
+import '../../features/recitation/domain/usecases/get_recitations_by_student_usecase.dart';
+import '../../features/recitation/domain/usecases/get_recitations_by_class_usecase.dart';
+import '../../features/recitation/presentation/blocs/recitation_bloc.dart';
 
 import '../network/api_client.dart';
 
@@ -52,10 +61,14 @@ Future<void> init() async {
   sl.registerLazySingleton<StudentRemoteDataSource>(
     () => StudentRemoteDataSourceImpl(sl()),
   );
+  sl.registerLazySingleton<RecitationRemoteDataSource>(
+    () => RecitationRemoteDataSourceImpl(sl()),
+  );
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
   sl.registerLazySingleton<ClassRepository>(() => ClassRepositoryImpl(sl()));
   sl.registerLazySingleton<StudentRepository>(() => StudentRepositoryImpl(sl()));
+  sl.registerLazySingleton<RecitationRepository>(() => RecitationRepositoryImpl(sl()));
 
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
@@ -73,8 +86,15 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUsersByRoleUseCase(sl()));
 
   sl.registerLazySingleton(() => GetStudentsUseCase(sl()));
+  sl.registerLazySingleton(() => ActivateStudentUseCase(sl()));
+  sl.registerLazySingleton(() => LogRecitationUseCase(sl()));
+  sl.registerLazySingleton(() => GetRecitationsByStudentUseCase(sl()));
+  sl.registerLazySingleton(() => GetRecitationsByClassUseCase(sl()));
 
-  sl.registerFactory(() => StudentBloc(getStudentsUseCase: sl()));
+  sl.registerFactory(() => StudentBloc(
+    getStudentsUseCase: sl(),
+    activateStudentUseCase: sl(),
+  ));
 
   sl.registerFactory(
     () => AuthBloc(
@@ -96,6 +116,13 @@ Future<void> init() async {
       deleteClassUseCase: sl(),
       assignStaffUseCase: sl(),
       getUsersByRoleUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => RecitationBloc(
+      logRecitationUseCase: sl(),
+      getRecitationsByStudentUseCase: sl(),
+      getRecitationsByClassUseCase: sl(),
     ),
   );
 }

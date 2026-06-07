@@ -22,7 +22,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailAddress => 'Email Address';
 
   @override
-  String get emailHint => 'admin@institute.edu';
+  String get emailHint => 'admin@domain.com';
 
   @override
   String get password => 'Password';
@@ -760,4 +760,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roleParent => 'Parent';
+
+  @override
+  String get ayahsCount => 'Number of Ayahs';
+
+  @override
+  String ayahsCountText(int count) {
+    return '$count ayahs';
+  }
+
+  @override
+  String get noRecitationsFound => 'No recitations found';
+
+  @override
+  String get noRecitationsFoundSubtitle => 'Start by logging a recitation.';
+
+  @override
+  String get failedToLoadRecitations => 'Failed to load recitations';
+
+  @override
+  String get ayahsRequired => 'Number of ayahs is required';
+
+  @override
+  String get ayahsInvalid => 'Please enter a valid number of ayahs';
+
+  @override
+  String get teacherRequired => 'Teacher information is required';
+
+  @override
+  String get activate => 'Activate';
+
+  @override
+  String get activateStudentConfirm => 'Activate this student?';
+
+  @override
+  String get activateStudentConfirmSubtitle =>
+      'This will grant the student access to the system.';
+
+  @override
+  String get studentCreated => 'Student added successfully!';
+
+  @override
+  String get classModeOnline => 'Online';
+
+  @override
+  String get classModeOffline => 'Offline';
+
+  @override
+  String get classTypeBoys => 'Boys';
+
+  @override
+  String get classTypeGirls => 'Girls';
+
+  @override
+  String get recitationTypeRecitation => 'Recitation';
 }

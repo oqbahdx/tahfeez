@@ -22,7 +22,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emailAddress => 'البريد الإلكتروني';
 
   @override
-  String get emailHint => 'admin@institute.edu';
+  String get emailHint => 'admin@domain.com';
 
   @override
   String get password => 'كلمة المرور';
@@ -758,4 +758,58 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get roleParent => 'ولي أمر';
+
+  @override
+  String get ayahsCount => 'عدد الآيات';
+
+  @override
+  String ayahsCountText(int count) {
+    return '$count آيات';
+  }
+
+  @override
+  String get noRecitationsFound => 'لم يتم العثور على تسميعات';
+
+  @override
+  String get noRecitationsFoundSubtitle => 'ابدأ بتسجيل تسميع';
+
+  @override
+  String get failedToLoadRecitations => 'فشل تحميل سجل التسميع';
+
+  @override
+  String get ayahsRequired => 'عدد الآيات مطلوب';
+
+  @override
+  String get ayahsInvalid => 'الرجاء إدخال رقم صحيح';
+
+  @override
+  String get teacherRequired => 'معلومات المعلم مطلوبة';
+
+  @override
+  String get activate => 'تفعيل';
+
+  @override
+  String get activateStudentConfirm => 'تفعيل هذا الطالب؟';
+
+  @override
+  String get activateStudentConfirmSubtitle =>
+      'سيتم منح الطالب حق الوصول إلى النظام.';
+
+  @override
+  String get studentCreated => 'تم إضافة الطالب بنجاح!';
+
+  @override
+  String get classModeOnline => 'عبر الإنترنت';
+
+  @override
+  String get classModeOffline => 'حضوري';
+
+  @override
+  String get classTypeBoys => 'بنين';
+
+  @override
+  String get classTypeGirls => 'بنات';
+
+  @override
+  String get recitationTypeRecitation => 'تسميع';
 }

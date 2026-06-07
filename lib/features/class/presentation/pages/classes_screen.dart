@@ -235,6 +235,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
           ),
           floatingActionButton: _isPrivileged
               ? FloatingActionButton.extended(
+                  heroTag: 'classes_fab',
                   onPressed: _navigateToAddClass,
                   backgroundColor: TahfeezColors.primary,
                   foregroundColor: TahfeezColors.onPrimary,

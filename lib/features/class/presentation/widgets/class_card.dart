@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/tahfeez_theme.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/shared_widgets.dart';
 import '../../domain/entities/class_entity.dart';
+import '../../domain/enums/class_type.dart';
+import '../../domain/enums/class_mode.dart';
 
 class ClassCard extends StatelessWidget {
   final ClassEntity classEntity;
@@ -105,7 +106,10 @@ class ClassCard extends StatelessWidget {
                                   runSpacing: 5,
                                   children: [
                                     _PillChip(
-                                      label: classEntity.typeName,
+                                      label: switch (classEntity.classType) {
+                                        ClassType.boys => l10n.classTypeBoys,
+                                        ClassType.girls => l10n.classTypeGirls,
+                                      },
                                       icon: Icons.category_outlined,
                                       bgColor: TahfeezColors.primaryContainer
                                           .withOpacity(0.12),
@@ -113,7 +117,10 @@ class ClassCard extends StatelessWidget {
                                           TahfeezColors.primaryContainer,
                                     ),
                                     _PillChip(
-                                      label: classEntity.modeName,
+                                      label: switch (classEntity.classMode) {
+                                        ClassMode.online => l10n.classModeOnline,
+                                        ClassMode.offline => l10n.classModeOffline,
+                                      },
                                       icon: classEntity.classMode.value == 0
                                           ? Icons.desktop_windows_outlined
                                           : Icons.location_on_outlined,
