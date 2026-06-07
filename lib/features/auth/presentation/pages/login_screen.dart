@@ -95,105 +95,107 @@ class _LoginScreenState extends State<LoginScreen> {
           final isLoading = state is AuthLoading;
           return Scaffold(
           backgroundColor: TahfeezColors.background,
-          body: Stack(
-            children: [
-              Positioned(
-                top: 16,
-                right: isArabic ? null : 16,
-                left: isArabic ? 16 : null,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: TahfeezColors.surfaceContainerLowest,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: TahfeezColors.outlineVariant),
-                      ),
-                      child: TextButton.icon(
-                        onPressed: _toggleLanguage,
-                        icon: const Icon(
-                          Icons.language,
-                          color: TahfeezColors.primary,
-                          size: 18,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 16,
+                  right: isArabic ? null : 16,
+                  left: isArabic ? 16 : null,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: TahfeezColors.surfaceContainerLowest,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: TahfeezColors.outlineVariant),
                         ),
-                        label: Text(
-                          isArabic ? l10n.languageEnglish : l10n.languageArabic,
-                          style: TahfeezTextStyles.labelMd.copyWith(
+                        child: TextButton.icon(
+                          onPressed: _toggleLanguage,
+                          icon: const Icon(
+                            Icons.language,
                             color: TahfeezColors.primary,
+                            size: 18,
+                          ),
+                          label: Text(
+                            isArabic ? l10n.languageEnglish : l10n.languageArabic,
+                            style: TahfeezTextStyles.labelMd.copyWith(
+                              color: TahfeezColors.primary,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: -100,
-                top: -100,
-                child: Container(
-                  width: 400,
-                  height: 400,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        TahfeezColors.primaryContainer.withValues(alpha: 0.1),
-                        Colors.transparent,
-                      ],
-                    ),
+                    ],
                   ),
                 ),
-              ),
-              Positioned(
-                left: -80,
-                bottom: -80,
-                child: Container(
-                  width: 300,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        TahfeezColors.secondaryContainer.withValues(alpha: 0.08),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
+                Positioned(
+                  right: -100,
+                  top: -100,
                   child: Container(
-                    constraints: const BoxConstraints(maxWidth: 1000),
-                    height: isWide ? 600 : null,
+                    width: 400,
+                    height: 400,
                     decoration: BoxDecoration(
-                      color: TahfeezColors.surfaceContainerLowest,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.08),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                      border: Border.all(
-                        color: TahfeezColors.outlineVariant.withValues(alpha: 0.3),
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          TahfeezColors.primaryContainer.withValues(alpha: 0.1),
+                          Colors.transparent,
+                        ],
                       ),
                     ),
-                    child: isWide
-                        ? Row(
-                            children: [
-                              _buildLeftPanel(),
-                              Expanded(child: _buildFormPanel(isLoading: isLoading)),
-                            ],
-                          )
-                        : _buildFormPanel(isLoading: isLoading),
                   ),
                 ),
-              ),
-            ],
+                Positioned(
+                  left: -80,
+                  bottom: -80,
+                  child: Container(
+                    width: 300,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          TahfeezColors.secondaryContainer.withValues(alpha: 0.08),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 1000),
+                      height: isWide ? 600 : null,
+                      decoration: BoxDecoration(
+                        color: TahfeezColors.surfaceContainerLowest,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.08),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                        border: Border.all(
+                          color: TahfeezColors.outlineVariant.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: isWide
+                          ? Row(
+                              children: [
+                                _buildLeftPanel(),
+                                Expanded(child: _buildFormPanel(isLoading: isLoading)),
+                              ],
+                            )
+                          : _buildFormPanel(isLoading: isLoading),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

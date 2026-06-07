@@ -796,4 +796,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get activateStudentConfirmSubtitle =>
       'This will grant the student access to the system.';
+
+  @override
+  String get studentCreated => 'Student added successfully!';
+
+  @override
+  String get classModeOnline => 'Online';
+
+  @override
+  String get classModeOffline => 'Offline';
+
+  @override
+  String get classTypeBoys => 'Boys';
+
+  @override
+  String get classTypeGirls => 'Girls';
+
+  @override
+  String get recitationTypeRecitation => 'Recitation';
 }

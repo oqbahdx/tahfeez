@@ -794,4 +794,22 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get activateStudentConfirmSubtitle =>
       'سيتم منح الطالب حق الوصول إلى النظام.';
+
+  @override
+  String get studentCreated => 'تم إضافة الطالب بنجاح!';
+
+  @override
+  String get classModeOnline => 'عبر الإنترنت';
+
+  @override
+  String get classModeOffline => 'حضوري';
+
+  @override
+  String get classTypeBoys => 'بنين';
+
+  @override
+  String get classTypeGirls => 'بنات';
+
+  @override
+  String get recitationTypeRecitation => 'تسميع';
 }

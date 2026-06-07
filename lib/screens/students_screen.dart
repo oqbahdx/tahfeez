@@ -11,6 +11,7 @@ import '../theme/tahfeez_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../features/recitation/presentation/pages/log_recitation_page.dart';
 import '../features/recitation/presentation/pages/recitation_history_page.dart';
+import 'add_student_screen.dart';
 
 enum _StudentFilter { all, active, pending }
 
@@ -203,7 +204,17 @@ class _StudentsScreenState extends State<StudentsScreen> {
           floatingActionButton: hasData && allStudents.isNotEmpty
               ? FloatingActionButton.extended(
                   heroTag: 'students_fab',
-                  onPressed: () {},
+                  onPressed: () async {
+                    final result = await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AddStudentScreen(),
+                      ),
+                    );
+                    if (result == true && mounted) {
+                      context.read<StudentBloc>().add(RefreshStudentsEvent());
+                    }
+                  },
                   backgroundColor: TahfeezColors.primary,
                   foregroundColor: TahfeezColors.onPrimary,
                   icon: const Icon(Icons.person_add_outlined),

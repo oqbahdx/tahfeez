@@ -1609,6 +1609,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This will grant the student access to the system.'**
   String get activateStudentConfirmSubtitle;
+
+  /// No description provided for @studentCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Student added successfully!'**
+  String get studentCreated;
+
+  /// No description provided for @classModeOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get classModeOnline;
+
+  /// No description provided for @classModeOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get classModeOffline;
+
+  /// No description provided for @classTypeBoys.
+  ///
+  /// In en, this message translates to:
+  /// **'Boys'**
+  String get classTypeBoys;
+
+  /// No description provided for @classTypeGirls.
+  ///
+  /// In en, this message translates to:
+  /// **'Girls'**
+  String get classTypeGirls;
+
+  /// No description provided for @recitationTypeRecitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Recitation'**
+  String get recitationTypeRecitation;
 }
 
 class _AppLocalizationsDelegate

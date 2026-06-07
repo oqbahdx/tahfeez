@@ -301,5 +301,11 @@
   "teacherRequired": "Teacher information is required",
   "activate": "Activate",
   "activateStudentConfirm": "Activate this student?",
-  "activateStudentConfirmSubtitle": "This will grant the student access to the system."
+  "activateStudentConfirmSubtitle": "This will grant the student access to the system.",
+  "studentCreated": "Student added successfully!",
+  "classModeOnline": "Online",
+  "classModeOffline": "Offline",
+  "classTypeBoys": "Boys",
+  "classTypeGirls": "Girls",
+  "recitationTypeRecitation": "Recitation"
 }

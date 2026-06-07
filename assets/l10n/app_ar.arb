@@ -301,5 +301,11 @@
   "teacherRequired": "معلومات المعلم مطلوبة",
   "activate": "تفعيل",
   "activateStudentConfirm": "تفعيل هذا الطالب؟",
-  "activateStudentConfirmSubtitle": "سيتم منح الطالب حق الوصول إلى النظام."
+  "activateStudentConfirmSubtitle": "سيتم منح الطالب حق الوصول إلى النظام.",
+  "studentCreated": "تم إضافة الطالب بنجاح!",
+  "classModeOnline": "عبر الإنترنت",
+  "classModeOffline": "حضوري",
+  "classTypeBoys": "بنين",
+  "classTypeGirls": "بنات",
+  "recitationTypeRecitation": "تسميع"
 }

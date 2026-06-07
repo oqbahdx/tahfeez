@@ -221,7 +221,10 @@ class _AddClassScreenState extends State<AddClassScreen> {
                                 .map((type) => DropdownMenuItem(
                                       value: type,
                                       child: Text(
-                                        type.displayName,
+                                        switch (type) {
+                                          ClassType.boys => l10n.classTypeBoys,
+                                          ClassType.girls => l10n.classTypeGirls,
+                                        },
                                         style:
                                             TahfeezTextStyles.bodyMd.copyWith(
                                           color: TahfeezColors.onSurface,
@@ -256,7 +259,10 @@ class _AddClassScreenState extends State<AddClassScreen> {
                                 .map((mode) => DropdownMenuItem(
                                       value: mode,
                                       child: Text(
-                                        mode.displayName,
+                                        switch (mode) {
+                                          ClassMode.online => l10n.classModeOnline,
+                                          ClassMode.offline => l10n.classModeOffline,
+                                        },
                                         style:
                                             TahfeezTextStyles.bodyMd.copyWith(
                                           color: TahfeezColors.onSurface,

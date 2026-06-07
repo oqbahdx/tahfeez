@@ -106,7 +106,9 @@ class RecitationCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
-                  recitation.typeName,
+                  isRecitation
+                      ? l10n.recitationTypeRecitation
+                      : l10n.reviewMurajaah,
                   style: TahfeezTextStyles.labelMd.copyWith(
                     color: typeColor,
                     fontSize: 10,
