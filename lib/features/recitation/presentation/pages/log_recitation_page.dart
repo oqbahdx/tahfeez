@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import '../../../../core/di/injection_container.dart' as di;
-import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/toast_helper.dart';
 import '../../../../theme/tahfeez_theme.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/user.dart';
+import '../../../auth/domain/enums/user_role.dart';
+import '../../../class/presentation/blocs/class_bloc.dart';
+import '../../../class/presentation/blocs/class_event.dart';
+import '../../../class/presentation/blocs/class_state.dart';
 import '../../../student/presentation/blocs/student_bloc.dart';
 import '../../../student/presentation/blocs/student_state.dart';
 import '../../domain/enums/recitation_type.dart';
@@ -31,11 +32,9 @@ class _LogRecitationPageState extends State<LogRecitationPage> {
 
   String? _selectedStudentId;
   String? _teacherId;
-  String? _teacherName;
   DateTime _selectedDate = DateTime.now();
   RecitationType _recitationType = RecitationType.recitation;
   double _grade = 8;
-  bool _isLoadingTeacher = true;
 
   @override
   void initState() {
@@ -43,7 +42,7 @@ class _LogRecitationPageState extends State<LogRecitationPage> {
     if (widget.studentId != null) {
       _selectedStudentId = widget.studentId;
     }
-    _loadTeacherInfo();
+    context.read<ClassBloc>().add(FetchUsersEvent(UserRole.teacher.value));
   }
 
   @override
@@ -51,27 +50,6 @@ class _LogRecitationPageState extends State<LogRecitationPage> {
     _notesController.dispose();
     _ayahsCountController.dispose();
     super.dispose();
-  }
-
-  Future<void> _loadTeacherInfo() async {
-    try {
-      final apiClient = di.sl<ApiClient>();
-      final token = await apiClient.getAccessToken();
-      if (token != null && !JwtDecoder.isExpired(token)) {
-        final claims = JwtDecoder.decode(token);
-        if (mounted) {
-          setState(() {
-            _teacherId = claims['sub'] as String?;
-            _teacherName = claims['name'] as String?;
-            _isLoadingTeacher = false;
-          });
-        }
-      } else {
-        if (mounted) setState(() => _isLoadingTeacher = false);
-      }
-    } catch (_) {
-      if (mounted) setState(() => _isLoadingTeacher = false);
-    }
   }
 
   void _submit() {
@@ -312,43 +290,40 @@ class _LogRecitationPageState extends State<LogRecitationPage> {
                         _buildFormSection(
                           icon: Icons.school_outlined,
                           title: l10n.teacher,
-                          child: _isLoadingTeacher
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 14,
-                                    vertical: 14,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: TahfeezColors.surfaceContainerLowest,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: TahfeezColors.surfaceContainer,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.person,
-                                        size: 16,
-                                        color: TahfeezColors.onSurfaceVariant,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        _teacherName ?? l10n.teacher,
-                                        style: TahfeezTextStyles.bodyMd.copyWith(
-                                          color: TahfeezColors.onSurface,
-                                        ),
-                                      ),
-                                    ],
+                          child: BlocBuilder<ClassBloc, ClassState>(
+                            builder: (context, classState) {
+                              final teachers = classState is UsersLoaded
+                                  ? classState.users
+                                  : <User>[];
+                              return DropdownButtonFormField<String>(
+                                value: _teacherId,
+                                decoration: _inputDecoration(),
+                                hint: Text(
+                                  l10n.teacher,
+                                  style: TahfeezTextStyles.bodyMd.copyWith(
+                                    color: TahfeezColors.onSurfaceVariant,
                                   ),
                                 ),
+                                items: teachers
+                                    .map((t) => DropdownMenuItem(
+                                          value: t.id,
+                                          child: Text(
+                                            t.fullName ?? t.email,
+                                            style: TahfeezTextStyles.bodyMd
+                                                .copyWith(
+                                              color: TahfeezColors.onSurface,
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                                onChanged: (v) {
+                                  setState(() => _teacherId = v);
+                                },
+                                validator: (v) =>
+                                    v == null ? l10n.teacherRequired : null,
+                              );
+                            },
+                          ),
                         ),
 
                         _buildDivider(),

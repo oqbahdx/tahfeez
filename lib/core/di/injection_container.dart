@@ -30,6 +30,16 @@ import '../../features/recitation/domain/usecases/get_recitations_by_student_use
 import '../../features/recitation/domain/usecases/get_recitations_by_class_usecase.dart';
 import '../../features/recitation/presentation/blocs/recitation_bloc.dart';
 
+import '../../features/attendance/data/datasources/attendance_remote_datasource.dart';
+import '../../features/attendance/data/repositories/attendance_repository_impl.dart';
+import '../../features/attendance/domain/repositories/attendance_repository.dart';
+import '../../features/attendance/domain/usecases/get_attendance_by_date_usecase.dart';
+import '../../features/attendance/domain/usecases/get_attendance_history_usecase.dart';
+import '../../features/attendance/domain/usecases/get_attendance_report_usecase.dart';
+import '../../features/attendance/domain/usecases/record_attendance_usecase.dart';
+import '../../features/attendance/domain/usecases/update_attendance_usecase.dart';
+import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
+
 import '../network/api_client.dart';
 
 final sl = GetIt.instance;
@@ -123,6 +133,27 @@ Future<void> init() async {
       logRecitationUseCase: sl(),
       getRecitationsByStudentUseCase: sl(),
       getRecitationsByClassUseCase: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<AttendanceRemoteDataSource>(
+    () => AttendanceRemoteDataSourceImpl(sl()),
+  );
+  sl.registerLazySingleton<AttendanceRepository>(
+    () => AttendanceRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton(() => GetAttendanceByDateUseCase(sl()));
+  sl.registerLazySingleton(() => GetAttendanceHistoryUseCase(sl()));
+  sl.registerLazySingleton(() => GetAttendanceReportUseCase(sl()));
+  sl.registerLazySingleton(() => RecordAttendanceUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateAttendanceUseCase(sl()));
+  sl.registerFactory(
+    () => AttendanceBloc(
+      getAttendanceByDateUseCase: sl(),
+      getAttendanceHistoryUseCase: sl(),
+      getAttendanceReportUseCase: sl(),
+      recordAttendanceUseCase: sl(),
+      updateAttendanceUseCase: sl(),
     ),
   );
 }

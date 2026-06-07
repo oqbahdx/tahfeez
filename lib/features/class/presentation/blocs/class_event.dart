@@ -95,7 +95,7 @@ class SearchClassesEvent extends ClassEvent {
 }
 
 class FetchUsersEvent extends ClassEvent {
-  final String role;
+  final int role;
   const FetchUsersEvent(this.role);
   @override
   List<Object?> get props => [role];

@@ -130,7 +130,7 @@ class ClassRepositoryImpl implements ClassRepository {
   }
 
   @override
-  Future<Either<Failure, List<User>>> getUsersByRole(String role) async {
+  Future<Either<Failure, List<User>>> getUsersByRole(int role) async {
     try {
       final result = await remoteDataSource.getUsersByRole(role);
       return Right(result);

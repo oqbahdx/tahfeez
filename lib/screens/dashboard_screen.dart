@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../theme/tahfeez_theme.dart';
 import '../widgets/shared_widgets.dart';
 import '../l10n/app_localizations.dart';
-import 'attendance_screen.dart';
+import '../features/class/presentation/blocs/class_bloc.dart';
+import '../features/class/presentation/blocs/class_state.dart';
+import '../features/attendance/presentation/bloc/attendance_bloc.dart';
+import '../features/attendance/presentation/pages/attendance_by_date_page.dart';
 
 class DashboardScreen extends StatefulWidget {
   final Function(Locale)? onLocaleChange;
@@ -256,12 +260,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     icon: Icons.how_to_reg,
                     label: l10n.markAttendance,
                     color: TahfeezColors.primaryContainer,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AttendanceScreen(),
-                      ),
-                    ),
+                    onTap: () {
+                      final classBloc = context.read<ClassBloc>();
+                      final classState = classBloc.state;
+                      String classId = '';
+                      String className = '';
+                      if (classState is ClassesLoaded && classState.classes.isNotEmpty) {
+                        classId = classState.classes.first.id;
+                        className = classState.classes.first.name;
+                      }
+                      final bloc = context.read<AttendanceBloc>();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: bloc,
+                            child: AttendanceByDatePage(
+                              classId: classId,
+                              className: className,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   _QuickAction(
                     icon: Icons.person_add_outlined,

@@ -29,7 +29,7 @@ abstract class ClassRemoteDataSource {
     String? assistantId,
     String? supervisorId,
   });
-  Future<List<UserModel>> getUsersByRole(String role);
+  Future<List<UserModel>> getUsersByRole(int role);
 }
 
 class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
@@ -185,7 +185,7 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
   }
 
   @override
-  Future<List<UserModel>> getUsersByRole(String role) async {
+  Future<List<UserModel>> getUsersByRole(int role) async {
     try {
       final response = await apiClient.get(
         ApiConstants.usersEndpoint,

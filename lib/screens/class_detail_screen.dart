@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../theme/tahfeez_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/shared_widgets.dart';
-import 'attendance_screen.dart';
+import '../features/attendance/presentation/bloc/attendance_bloc.dart';
+import '../features/attendance/presentation/pages/attendance_by_date_page.dart';
 
 class ClassDetailScreen extends StatefulWidget {
   final dynamic classData;
@@ -263,7 +265,16 @@ class _ClassDetailScreenState extends State<ClassDetailScreen>
                             onPressed: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const AttendanceScreen(),
+                                builder: (_) {
+                          final bloc = context.read<AttendanceBloc>();
+                          return BlocProvider.value(
+                            value: bloc,
+                            child: AttendanceByDatePage(
+                              classId: 'class-1',
+                              className: 'Advanced Tajweed - Group A',
+                            ),
+                          );
+                        },
                               ),
                             ),
                             icon: const Icon(Icons.how_to_reg),

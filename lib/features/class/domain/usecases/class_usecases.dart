@@ -108,7 +108,7 @@ class GetUsersByRoleUseCase {
 
   GetUsersByRoleUseCase(this.repository);
 
-  Future<Either<Failure, List<User>>> call(String role) {
+  Future<Either<Failure, List<User>>> call(int role) {
     return repository.getUsersByRole(role);
   }
 }

@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
+import '../enums/attendance_status.dart';
 
 class Attendance extends Equatable {
   final String id;
   final String userId;
   final String? userName;
   final DateTime date;
-  final String status;
+  final AttendanceStatus status;
   final String? notes;
 
   const Attendance({

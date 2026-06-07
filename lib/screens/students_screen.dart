@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/utils/toast_helper.dart';
 import '../features/auth/domain/entities/user.dart';
+import '../features/class/presentation/blocs/class_bloc.dart';
 import '../features/student/presentation/blocs/student_bloc.dart';
 import '../features/student/presentation/widgets/student_shimmer.dart';
 import '../features/student/presentation/blocs/student_event.dart';
@@ -11,6 +12,8 @@ import '../theme/tahfeez_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../features/recitation/presentation/pages/log_recitation_page.dart';
 import '../features/recitation/presentation/pages/recitation_history_page.dart';
+import '../features/attendance/presentation/bloc/attendance_bloc.dart';
+import '../features/attendance/presentation/pages/attendance_history_page.dart';
 import 'add_student_screen.dart';
 
 enum _StudentFilter { all, active, pending }
@@ -365,10 +368,13 @@ class _StudentsScreenState extends State<StudentsScreen> {
             context,
             MaterialPageRoute(
               builder: (_) => BlocProvider.value(
-                value: context.read<RecitationBloc>(),
-                child: LogRecitationPage(
-                  studentId: displayStudents[i].id,
-                  studentName: displayStudents[i].fullName ?? '',
+                value: context.read<ClassBloc>(),
+                child: BlocProvider.value(
+                  value: context.read<RecitationBloc>(),
+                  child: LogRecitationPage(
+                    studentId: displayStudents[i].id,
+                    studentName: displayStudents[i].fullName ?? '',
+                  ),
                 ),
               ),
             ),
@@ -545,6 +551,21 @@ class _StudentCard extends StatelessWidget {
                 if (v == 'log') onLogRecitation();
                 if (v == 'history') onTap();
                 if (v == 'activate') onActivate?.call();
+                if (v == 'attendance') {
+                  final bloc = context.read<AttendanceBloc>();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: bloc,
+                        child: AttendanceHistoryPage(
+                          userId: student.id,
+                          userName: student.fullName ?? student.email,
+                        ),
+                      ),
+                    ),
+                  );
+                }
               },
               icon: const Icon(
                 Icons.more_vert,
