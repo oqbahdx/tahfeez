@@ -62,7 +62,7 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
       final response = await apiClient.get(
         '${ApiConstants.classesEndpoint}/$id',
       );
-      return ClassModel.fromJson(response);
+      return ClassModel.fromJson(response['value'] as Map<String, dynamic>);
     } on ServerException {
       rethrow;
     } on NetworkException {
@@ -78,7 +78,9 @@ class ClassRemoteDataSourceImpl implements ClassRemoteDataSource {
       final response = await apiClient.get(
         '${ApiConstants.classesEndpoint}/$classId/students',
       );
-      return (response as List).map((e) => UserModel.fromJson(e)).toList();
+      return (response['value'] as List)
+          .map((e) => UserModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     } on ServerException {
       rethrow;
     } on NetworkException {

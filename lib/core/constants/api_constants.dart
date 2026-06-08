@@ -9,6 +9,9 @@ class ApiConstants {
   static const String salariesEndpoint = '/api/salaries';
   static const String subscriptionsEndpoint = '/api/subscriptions';
   static const String attendanceEndpoint = '/api/attendance';
+
+  static String assignClassEndpoint(String studentId) =>
+    '/api/Students/$studentId/assign-class';
 }
 
 class RoleConstants {

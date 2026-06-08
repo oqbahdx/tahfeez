@@ -27,6 +27,17 @@ class StudentsLoaded extends StudentState {
   List<Object?> get props => [students, filteredStudents, searchQuery];
 }
 
+class StudentOperationLoading extends StudentState {
+  const StudentOperationLoading();
+}
+
+class StudentOperationSuccess extends StudentState {
+  final String message;
+  const StudentOperationSuccess(this.message);
+  @override
+  List<Object?> get props => [message];
+}
+
 class StudentError extends StudentState {
   final String message;
 

@@ -13,6 +13,8 @@ import '../widgets/class_card.dart';
 import '../widgets/class_shimmer.dart';
 import '../widgets/empty_classes_widget.dart';
 import 'add_class_screen.dart';
+import '../../../../features/student/presentation/blocs/student_bloc.dart';
+import 'class_details_screen.dart';
 
 class ClassesScreen extends StatefulWidget {
   const ClassesScreen({super.key});
@@ -394,7 +396,21 @@ class _ClassesScreenState extends State<ClassesScreen> {
           classEntity: displayClasses[i],
           showDelete: di.sl<AuthService>().isPrivileged,
           deleteDisabled: isRefreshing,
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: context.read<StudentBloc>(),
+                  child: BlocProvider(
+                    create: (_) => di.sl<ClassBloc>(),
+                    child: ClassDetailsScreen(
+                      classId: displayClasses[i].id,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
           onDelete: () => _showDeleteConfirmation(displayClasses[i]),
         ),
       ),

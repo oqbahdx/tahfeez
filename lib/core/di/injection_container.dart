@@ -20,6 +20,7 @@ import '../../features/student/data/repositories/student_repository_impl.dart';
 import '../../features/student/domain/repositories/student_repository.dart';
 import '../../features/student/domain/usecases/get_students_usecase.dart';
 import '../../features/student/domain/usecases/activate_student_usecase.dart';
+import '../../features/student/domain/usecases/assign_student_to_class_usecase.dart';
 import '../../features/student/presentation/blocs/student_bloc.dart';
 
 import '../../features/recitation/data/datasources/recitation_remote_datasource.dart';
@@ -100,6 +101,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetStudentsUseCase(sl()));
   sl.registerLazySingleton(() => ActivateStudentUseCase(sl()));
+  sl.registerLazySingleton(() => AssignStudentToClassUseCase(sl()));
   sl.registerLazySingleton(() => LogRecitationUseCase(sl()));
   sl.registerLazySingleton(() => GetRecitationsByStudentUseCase(sl()));
   sl.registerLazySingleton(() => GetRecitationsByClassUseCase(sl()));
@@ -107,6 +109,7 @@ Future<void> init() async {
   sl.registerFactory(() => StudentBloc(
     getStudentsUseCase: sl(),
     activateStudentUseCase: sl(),
+    assignStudentToClassUseCase: sl(),
   ));
 
   sl.registerFactory(

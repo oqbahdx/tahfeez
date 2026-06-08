@@ -25,6 +25,7 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   jwt_decoder: ^2.0.1
   shimmer: ^3.0.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -36,3 +37,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+   - assets/icons/

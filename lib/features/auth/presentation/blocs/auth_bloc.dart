@@ -53,6 +53,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_rolePrefsKey, role);
     di.sl<AuthService>().setRole(role);
+    print('User role: $role');
   }
 
   Future<void> _clearSession() async {

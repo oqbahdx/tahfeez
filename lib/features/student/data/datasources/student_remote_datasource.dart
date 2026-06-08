@@ -7,6 +7,11 @@ import '../../../auth/domain/enums/user_role.dart';
 abstract class StudentRemoteDataSource {
   Future<List<UserModel>> getStudents();
   Future<UserModel> activateStudent(String studentId);
+  Future<void> assignStudentToClass({
+    required String studentId,
+    required String classId,
+    required String level,
+  });
 }
 
 class StudentRemoteDataSourceImpl implements StudentRemoteDataSource {
@@ -27,6 +32,30 @@ class StudentRemoteDataSourceImpl implements StudentRemoteDataSource {
           .whereType<Map<String, dynamic>>()
           .map((e) => UserModel.fromJson(e))
           .toList();
+    } on ServerException {
+      rethrow;
+    } on NetworkException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  @override
+  Future<void> assignStudentToClass({
+    required String studentId,
+    required String classId,
+    required String level,
+  }) async {
+    try {
+      await apiClient.post(
+        ApiConstants.assignClassEndpoint(studentId),
+        data: {
+          'classId': classId,
+          'level': level,
+        },
+      );
     } on ServerException {
       rethrow;
     } on NetworkException {

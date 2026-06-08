@@ -782,6 +782,24 @@ abstract class AppLocalizations {
   /// **'Class Details'**
   String get classDetails;
 
+  /// No description provided for @classInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Class Info'**
+  String get classInfo;
+
+  /// No description provided for @studentsList.
+  ///
+  /// In en, this message translates to:
+  /// **'Students'**
+  String get studentsList;
+
+  /// No description provided for @noStudentsInClass.
+  ///
+  /// In en, this message translates to:
+  /// **'No students enrolled in this class'**
+  String get noStudentsInClass;
+
   /// No description provided for @typeRecitation.
   ///
   /// In en, this message translates to:
@@ -1735,6 +1753,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recitation'**
   String get recitationTypeRecitation;
+
+  /// No description provided for @assignToClass.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to Class'**
+  String get assignToClass;
+
+  /// No description provided for @selectClassToAssign.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a class'**
+  String get selectClassToAssign;
+
+  /// No description provided for @assignToClassSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Student assigned to class successfully!'**
+  String get assignToClassSuccess;
 }
 
 class _AppLocalizationsDelegate

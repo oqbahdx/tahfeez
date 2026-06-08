@@ -28,3 +28,22 @@ class ActivateStudentEvent extends StudentEvent {
   @override
   List<Object?> get props => [studentId];
 }
+
+class AssignStudentToClassEvent extends StudentEvent {
+  final String studentId;
+  final String classId;
+  final String level;
+
+  const AssignStudentToClassEvent({
+    required this.studentId,
+    required this.classId,
+    required this.level,
+  });
+
+  @override
+  List<Object?> get props => [studentId, classId, level];
+}
+
+class ResetStudentOperationStateEvent extends StudentEvent {
+  const ResetStudentOperationStateEvent();
+}

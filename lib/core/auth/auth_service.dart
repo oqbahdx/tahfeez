@@ -4,11 +4,11 @@ class AuthService {
   String? _role;
 
   String? get role => _role;
-  bool get isAdmin => _role == RoleConstants.admin;
-  bool get isTeacher => _role == RoleConstants.teacher;
+  bool get Admin => _role == RoleConstants.admin;
+  bool get Teacher => _role == RoleConstants.teacher;
   bool get isSupervisor => _role == RoleConstants.supervisor;
-  bool get canAccessStudents => isAdmin || isTeacher;
-  bool get canAccessAttendance => isAdmin || isTeacher;
+  bool get canAccessStudents => Admin || Teacher;
+  bool get canAccessAttendance =>   Teacher;
   bool get isPrivileged =>
       _role == RoleConstants.admin ||
       _role == RoleConstants.teacher ||

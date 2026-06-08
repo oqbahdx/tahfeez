@@ -371,6 +371,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get classDetails => 'تفاصيل الفصل';
 
   @override
+  String get classInfo => 'معلومات الفصل';
+
+  @override
+  String get studentsList => 'الطلاب';
+
+  @override
+  String get noStudentsInClass => 'لا يوجد طلاب مسجلون في هذا الفصل';
+
+  @override
   String get typeRecitation => 'النوع: تسميع';
 
   @override
@@ -858,4 +867,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recitationTypeRecitation => 'تسميع';
+
+  @override
+  String get assignToClass => 'تعيين إلى فصل';
+
+  @override
+  String get selectClassToAssign => 'اختر فصلاً';
+
+  @override
+  String get assignToClassSuccess => 'تم تعيين الطالب إلى الفصل بنجاح!';
 }

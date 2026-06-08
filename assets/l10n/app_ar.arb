@@ -144,6 +144,9 @@
   "superAdmin": "المشرف الأعلى",
   "edit": "تعديل",
   "classDetails": "تفاصيل الفصل",
+  "classInfo": "معلومات الفصل",
+  "studentsList": "الطلاب",
+  "noStudentsInClass": "لا يوجد طلاب مسجلون في هذا الفصل",
   "typeRecitation": "النوع: تسميع",
   "modeInPerson": "الحضور: حضوري",
   "levelAdvanced": "متقدم",
@@ -322,5 +325,8 @@
   "classModeOffline": "حضوري",
   "classTypeBoys": "بنين",
   "classTypeGirls": "بنات",
-  "recitationTypeRecitation": "تسميع"
+  "recitationTypeRecitation": "تسميع",
+  "assignToClass": "تعيين إلى فصل",
+  "selectClassToAssign": "اختر فصلاً",
+  "assignToClassSuccess": "تم تعيين الطالب إلى الفصل بنجاح!"
 }

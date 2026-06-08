@@ -371,6 +371,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get classDetails => 'Class Details';
 
   @override
+  String get classInfo => 'Class Info';
+
+  @override
+  String get studentsList => 'Students';
+
+  @override
+  String get noStudentsInClass => 'No students enrolled in this class';
+
+  @override
   String get typeRecitation => 'Type: Recitation';
 
   @override
@@ -861,4 +870,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recitationTypeRecitation => 'Recitation';
+
+  @override
+  String get assignToClass => 'Assign to Class';
+
+  @override
+  String get selectClassToAssign => 'Select a class';
+
+  @override
+  String get assignToClassSuccess => 'Student assigned to class successfully!';
 }

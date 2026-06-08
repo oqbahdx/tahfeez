@@ -4,6 +4,8 @@ import '../core/auth/auth_service.dart';
 import '../core/di/injection_container.dart' as di;
 import '../core/utils/toast_helper.dart';
 import '../features/auth/domain/entities/user.dart';
+import '../features/class/domain/entities/class_entity.dart';
+import '../features/class/domain/usecases/class_usecases.dart';
 import '../features/class/presentation/blocs/class_bloc.dart';
 import '../features/student/presentation/blocs/student_bloc.dart';
 import '../features/student/presentation/widgets/student_shimmer.dart';
@@ -56,7 +58,11 @@ class _StudentsScreenState extends State<StudentsScreen> {
     final l10n = AppLocalizations.of(context)!;
     return BlocConsumer<StudentBloc, StudentState>(
       listener: (context, state) {
-        if (state is StudentError) {
+        if (state is StudentOperationSuccess &&
+            state.message == 'assigned_to_class') {
+          AppToast.success(l10n.assignToClassSuccess);
+          context.read<StudentBloc>().add(const ResetStudentOperationStateEvent());
+        } else if (state is StudentError) {
           if (context.read<StudentBloc>().state is! StudentsLoaded) {
             AppToast.error(state.message);
           }
@@ -388,6 +394,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
           onActivate: displayStudents[i].status != 'Active'
               ? () => _confirmActivate(context, displayStudents[i])
               : null,
+          onAssignToClass: () => _showAssignToClassDialog(displayStudents[i]),
         ),
       ),
     );
@@ -427,6 +434,382 @@ class _StudentsScreenState extends State<StudentsScreen> {
       ),
     );
   }
+
+
+
+
+
+
+Future<void> _showAssignToClassDialog(User student) async {
+  final l10n = AppLocalizations.of(context)!;
+  final useCase = di.sl<GetAllClassesUseCase>();
+  final result = await useCase();
+
+  List<ClassEntity> classes = [];
+  final hadFailure = result.fold(
+    (failure) {
+      if (mounted) AppToast.error(failure.message);
+      return true;
+    },
+    (list) {
+      classes = list;
+      return false;
+    },
+  );
+
+  if (hadFailure || !mounted || classes.isEmpty) {
+    if (mounted && !hadFailure && classes.isEmpty) {
+      AppToast.error(l10n.noClassesFound);
+    }
+    return;
+  }
+
+  ClassEntity? selectedClass;
+  final levelController = TextEditingController();
+
+  final assigned = await showDialog<bool>(
+    context: context,
+    barrierColor: Colors.black54,
+    builder: (ctx) => Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      child: StatefulBuilder(
+        builder: (ctx, setDialogState) => Container(
+          decoration: BoxDecoration(
+            color: TahfeezColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(28),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 40,
+                offset: const Offset(0, 12),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+
+                // ── Header strip ────────────────────────────────
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 18, 16, 16),
+                  decoration: BoxDecoration(
+                    color: TahfeezColors.primary.withOpacity(0.05),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: TahfeezColors.outlineVariant.withOpacity(0.4),
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      // Icon badge
+                      Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: TahfeezColors.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          Icons.menu_book_rounded,
+                          color: TahfeezColors.primary,
+                          size: 18,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.assignToClass,
+                              style: TahfeezTextStyles.titleLg.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 1),
+                            Text(
+                              student.fullName ?? student.email,
+                              style: TahfeezTextStyles.bodyMd.copyWith(
+                                color: TahfeezColors.onSurfaceVariant,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Close button
+                      SizedBox(
+                        width: 32,
+                        height: 32,
+                        child: IconButton.filled(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          icon: const Icon(Icons.close_rounded, size: 16),
+                          style: IconButton.styleFrom(
+                            backgroundColor:
+                                TahfeezColors.outlineVariant.withOpacity(0.3),
+                            foregroundColor: TahfeezColors.onSurfaceVariant,
+                          ),
+                          padding: EdgeInsets.zero,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // ── Body ────────────────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      // Section: class list
+                      _SectionLabel(label: l10n.selectClassToAssign),
+                      const SizedBox(height: 10),
+
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 210),
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Column(
+                            children: List.generate(classes.length, (i) {
+                              final cls = classes[i];
+                              final isSelected = selectedClass?.id == cls.id;
+                              return _ClassTile(
+                                classEntity: cls,
+                                isSelected: isSelected,
+                                onTap: () => setDialogState(
+                                  () => selectedClass = cls,
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Section: level
+                      _SectionLabel(label: l10n.levelAdvanced),
+                      const SizedBox(height: 10),
+
+                      TextField(
+                        controller: levelController,
+                        style: TahfeezTextStyles.bodyMd,
+                        decoration: InputDecoration(
+                          hintText: 'e.g. Beginner, Advanced',
+                          hintStyle: TahfeezTextStyles.bodyMd.copyWith(
+                            color: TahfeezColors.onSurfaceVariant
+                                .withOpacity(0.45),
+                          ),
+                          filled: true,
+                          fillColor: TahfeezColors.surfaceContainer,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: TahfeezColors.primary,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Actions
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () => Navigator.pop(ctx, false),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor:
+                                    TahfeezColors.onSurfaceVariant,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                side: BorderSide(
+                                  color: TahfeezColors.outlineVariant,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: Text(
+                                l10n.cancel,
+                                style: TahfeezTextStyles.labelLg,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            flex: 2,
+                            child: FilledButton(
+                              onPressed: selectedClass != null
+                                  ? () => Navigator.pop(ctx, true)
+                                  : null,
+                              style: FilledButton.styleFrom(
+                                backgroundColor: TahfeezColors.primary,
+                                disabledBackgroundColor:
+                                    TahfeezColors.primary.withOpacity(0.28),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: Text(
+                                l10n.submit,
+                                style: TahfeezTextStyles.labelLg.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  if (assigned == true && selectedClass != null && mounted) {
+    context.read<StudentBloc>().add(AssignStudentToClassEvent(
+      studentId: student.id,
+      classId: selectedClass!.id,
+      level: levelController.text.trim().isEmpty
+          ? 'Beginner'
+          : levelController.text.trim(),
+    ));
+  }
+}
+
+  
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label.toUpperCase(),
+      style: TahfeezTextStyles.labelMd.copyWith(
+        color: TahfeezColors.onSurfaceVariant,
+        letterSpacing: 0.9,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+}
+
+class _ClassTile extends StatelessWidget {
+  const _ClassTile({
+    required this.classEntity,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final ClassEntity classEntity;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: isSelected
+              ? TahfeezColors.primary.withOpacity(0.07)
+              : TahfeezColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected
+                ? TahfeezColors.primary.withOpacity(0.35)
+                : Colors.transparent,
+            width: 1.5,
+          ),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          splashColor: TahfeezColors.primary.withOpacity(0.06),
+          highlightColor: Colors.transparent,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              children: [
+                // Radio dot
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isSelected
+                        ? TahfeezColors.primary
+                        : Colors.transparent,
+                    border: Border.all(
+                      color: isSelected
+                          ? TahfeezColors.primary
+                          : TahfeezColors.outlineVariant,
+                      width: 2,
+                    ),
+                  ),
+                  child: isSelected
+                      ? const Icon(
+                          Icons.check_rounded,
+                          size: 12,
+                          color: Colors.white,
+                        )
+                      : null,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    classEntity.name,
+                    style: TahfeezTextStyles.bodyMd.copyWith(
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
+                      color: isSelected
+                          ? TahfeezColors.primary
+                          : TahfeezColors.onSurface,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _StudentCard extends StatelessWidget {
@@ -435,6 +818,7 @@ class _StudentCard extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onLogRecitation;
   final VoidCallback? onActivate;
+  final VoidCallback onAssignToClass;
 
   const _StudentCard({
     required this.student,
@@ -442,6 +826,7 @@ class _StudentCard extends StatelessWidget {
     required this.onTap,
     required this.onLogRecitation,
     this.onActivate,
+    required this.onAssignToClass,
   });
 
   String get _initials {
@@ -573,6 +958,8 @@ class _StudentCard extends StatelessWidget {
                       ),
                     ),
                   );
+                } else if (v == 'assign_class') {
+                  onAssignToClass();
                 }
               },
               icon: const Icon(
@@ -593,6 +980,10 @@ class _StudentCard extends StatelessWidget {
                 if (canAccessAttendance)
                   PopupMenuItem(
                       value: 'attendance', child: Text(l10n.attendance)),
+                PopupMenuItem(
+                  value: 'assign_class',
+                  child: Text(l10n.assignToClass),
+                ),
               ],
             ),
           ],

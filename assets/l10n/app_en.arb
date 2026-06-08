@@ -144,6 +144,9 @@
   "superAdmin": "Super Admin",
   "edit": "Edit",
   "classDetails": "Class Details",
+  "classInfo": "Class Info",
+  "studentsList": "Students",
+  "noStudentsInClass": "No students enrolled in this class",
   "typeRecitation": "Type: Recitation",
   "modeInPerson": "Mode: In-Person",
   "levelAdvanced": "Advanced",
@@ -322,5 +325,8 @@
   "classModeOffline": "Offline",
   "classTypeBoys": "Boys",
   "classTypeGirls": "Girls",
-  "recitationTypeRecitation": "Recitation"
+  "recitationTypeRecitation": "Recitation",
+  "assignToClass": "Assign to Class",
+  "selectClassToAssign": "Select a class",
+  "assignToClassSuccess": "Student assigned to class successfully!"
 }

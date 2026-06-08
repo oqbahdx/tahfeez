@@ -2,12 +2,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../auth/domain/entities/user.dart';
 import '../../domain/usecases/get_students_usecase.dart';
 import '../../domain/usecases/activate_student_usecase.dart';
+import '../../domain/usecases/assign_student_to_class_usecase.dart';
 import 'student_event.dart';
 import 'student_state.dart';
 
 class StudentBloc extends Bloc<StudentEvent, StudentState> {
   final GetStudentsUseCase getStudentsUseCase;
   final ActivateStudentUseCase activateStudentUseCase;
+  final AssignStudentToClassUseCase assignStudentToClassUseCase;
 
   List<User> _cachedStudents = [];
   String _currentSearchQuery = '';
@@ -15,11 +17,14 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   StudentBloc({
     required this.getStudentsUseCase,
     required this.activateStudentUseCase,
+    required this.assignStudentToClassUseCase,
   }) : super(StudentInitial()) {
     on<GetStudentsEvent>(_onGetStudents);
     on<RefreshStudentsEvent>(_onRefreshStudents);
     on<SearchStudentsEvent>(_onSearchStudents);
     on<ActivateStudentEvent>(_onActivateStudent);
+    on<AssignStudentToClassEvent>(_onAssignStudentToClass);
+    on<ResetStudentOperationStateEvent>(_onResetOperationState);
   }
 
   Future<void> _onGetStudents(
@@ -103,6 +108,33 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       (_) {
         add(RefreshStudentsEvent());
       },
+    );
+  }
+
+  Future<void> _onResetOperationState(
+    ResetStudentOperationStateEvent event,
+    Emitter<StudentState> emit,
+  ) async {
+    if (_cachedStudents.isNotEmpty) {
+      _applySearchFilter(emit);
+    } else {
+      emit(StudentInitial());
+    }
+  }
+
+  Future<void> _onAssignStudentToClass(
+    AssignStudentToClassEvent event,
+    Emitter<StudentState> emit,
+  ) async {
+    emit(const StudentOperationLoading());
+    final result = await assignStudentToClassUseCase(
+      studentId: event.studentId,
+      classId: event.classId,
+      level: event.level,
+    );
+    result.fold(
+      (failure) => emit(StudentError(failure.message)),
+      (_) => emit(const StudentOperationSuccess('assigned_to_class')),
     );
   }
 

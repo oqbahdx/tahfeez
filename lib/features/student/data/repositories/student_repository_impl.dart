@@ -25,6 +25,28 @@ class StudentRepositoryImpl implements StudentRepository {
   }
 
   @override
+  Future<Either<Failure, void>> assignStudentToClass({
+    required String studentId,
+    required String classId,
+    required String level,
+  }) async {
+    try {
+      await remoteDataSource.assignStudentToClass(
+        studentId: studentId,
+        classId: classId,
+        level: level,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, User>> activateStudent(String studentId) async {
     try {
       final result = await remoteDataSource.activateStudent(studentId);
