@@ -48,13 +48,14 @@ class _AttendanceByDatePageState extends State<AttendanceByDatePage> {
   }
 
   Future<void> _pickDate() async {
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     final picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime(2020),
       lastDate: now,
-      helpText: 'Select date',
+      helpText: l10n.selectDate,
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -68,7 +69,7 @@ class _AttendanceByDatePageState extends State<AttendanceByDatePage> {
     );
     if (picked != null) {
       if (picked.isAfter(now)) {
-        if (mounted) AppToast.error('Date cannot be in the future');
+        if (mounted) AppToast.error(l10n.dateCannotBeFuture);
         return;
       }
       setState(() {
@@ -88,11 +89,12 @@ class _AttendanceByDatePageState extends State<AttendanceByDatePage> {
   }
 
   void _submitAll() {
+    final l10n = AppLocalizations.of(context)!;
     final state = context.read<AttendanceBloc>().state;
     if (state is! AttendanceLoaded && state is! AttendanceEmpty) return;
 
     if (state is AttendanceLoaded && state.attendances.isEmpty) {
-      AppToast.error('No students to save');
+      AppToast.error(l10n.noStudentsToSave);
       return;
     }
 
@@ -109,7 +111,7 @@ class _AttendanceByDatePageState extends State<AttendanceByDatePage> {
     }
 
     if (records.isEmpty) {
-      AppToast.error('No attendance records to save');
+      AppToast.error(l10n.noAttendanceRecordsToSave);
       return;
     }
 
@@ -303,7 +305,7 @@ class _AttendanceByDatePageState extends State<AttendanceByDatePage> {
                                 color: TahfeezColors.onPrimary,
                               ),
                         label: Text(
-                          isSubmitting ? 'Saving...' : 'Save Attendance',
+                          isSubmitting ? l10n.saving : l10n.submitAttendance,
                           style: TahfeezTextStyles.labelLg.copyWith(
                             color: TahfeezColors.onPrimary,
                             fontSize: 16,
@@ -349,8 +351,8 @@ class _AttendanceByDatePageState extends State<AttendanceByDatePage> {
 
     if (hasData && attendances.isEmpty) {
       return AttendanceEmptyView(
-        title: 'No students found',
-        subtitle: 'No attendance records for this date.',
+        title: l10n.noStudentsFound,
+        subtitle: l10n.noAttendanceRecordsForDate,
         onRetry: _fetchAttendance,
       );
     }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/auth/auth_service.dart';
+import '../../../../core/di/injection_container.dart' as di;
 import '../../../../core/utils/toast_helper.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../theme/tahfeez_theme.dart';
 import '../../domain/entities/attendance.dart';
 import '../../domain/enums/attendance_status.dart';
@@ -10,6 +13,7 @@ import '../bloc/attendance_state.dart';
 import '../widgets/attendance_shimmer.dart';
 import '../widgets/attendance_error_view.dart';
 import '../widgets/attendance_empty_view.dart';
+import '../extensions/attendance_status_ext.dart';
 import '../widgets/attendance_summary_card.dart';
 import '../widgets/attendance_calendar.dart';
 import '../widgets/attendance_timeline_tile.dart';
@@ -43,8 +47,166 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
         .add(FetchAttendanceHistory(widget.userId));
   }
 
+  Future<void> _showAddAttendanceDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    var selectedDate = DateTime.now();
+    var selectedStatus = AttendanceStatus.present;
+    final notesController = TextEditingController();
+
+    final bloc = context.read<AttendanceBloc>();
+
+    await showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: TahfeezColors.surfaceContainerLowest,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            l10n.addAttendanceRecord,
+            style: TahfeezTextStyles.titleLg.copyWith(
+              color: TahfeezColors.onSurface,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime.now(),
+                    builder: (context, child) => Theme(
+                      data: Theme.of(context).copyWith(
+                        colorScheme: Theme.of(context)
+                            .colorScheme
+                            .copyWith(primary: TahfeezColors.primary),
+                      ),
+                      child: child!,
+                    ),
+                  );
+                  if (picked != null) {
+                    setDialogState(() => selectedDate = picked);
+                  }
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: TahfeezColors.surfaceContainer,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: TahfeezColors.outlineVariant),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_today,
+                        size: 16,
+                        color: TahfeezColors.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}',
+                        style: TahfeezTextStyles.labelLg.copyWith(
+                          color: TahfeezColors.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<AttendanceStatus>(
+                value: selectedStatus,
+                decoration: InputDecoration(
+                  labelText: l10n.status,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: TahfeezColors.outlineVariant),
+                  ),
+                  filled: true,
+                  fillColor: TahfeezColors.surfaceContainer,
+                ),
+                items: AttendanceStatus.values.map((s) {
+                  return DropdownMenuItem(
+                    value: s,
+                    child: Text(s.localizedName(l10n)),
+                  );
+                }).toList(),
+                onChanged: (v) {
+                  if (v != null) {
+                    setDialogState(() => selectedStatus = v);
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: notesController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  hintText: l10n.notesOptional,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: TahfeezColors.outlineVariant),
+                  ),
+                  filled: true,
+                  fillColor: TahfeezColors.surfaceContainer,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(
+                l10n.cancel,
+                style: TahfeezTextStyles.labelLg.copyWith(
+                  color: TahfeezColors.onSurfaceVariant,
+                ),
+              ),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                bloc.add(
+                  RecordAttendanceEvent([
+                    {
+                      'userId': widget.userId,
+                      'date': selectedDate,
+                      'status': selectedStatus.toApi(),
+                      'notes': notesController.text.trim().isEmpty
+                          ? null
+                          : notesController.text.trim(),
+                    },
+                  ]),
+                );
+              },
+              style: FilledButton.styleFrom(
+                backgroundColor: TahfeezColors.primary,
+              ),
+              child: Text(
+                l10n.save,
+                style: TahfeezTextStyles.labelLg.copyWith(
+                  color: TahfeezColors.onPrimary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: TahfeezColors.surfaceContainerLow,
       appBar: AppBar(
@@ -72,18 +234,40 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
           ),
         ),
         title: Text(
-          'Attendance History',
+          l10n.attendanceHistory,
           style: TahfeezTextStyles.headlineLg.copyWith(
             color: TahfeezColors.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.w700,
           ),
         ),
+        actions: di.sl<AuthService>().canAccessAttendance
+            ? [
+                TextButton.icon(
+                  onPressed: _showAddAttendanceDialog,
+                  icon: const Icon(
+                    Icons.add,
+                    size: 18,
+                    color: TahfeezColors.primary,
+                  ),
+                  label: Text(
+                    l10n.addAttendance,
+                    style: TahfeezTextStyles.labelLg.copyWith(
+                      color: TahfeezColors.primary,
+                    ),
+                  ),
+                ),
+              ]
+            : null,
       ),
       body: BlocConsumer<AttendanceBloc, AttendanceState>(
-        listenWhen: (previous, current) => current is AttendanceError,
+        listenWhen: (previous, current) =>
+            current is AttendanceError || current is AttendanceSuccess,
         listener: (context, state) {
-          if (state is AttendanceError) {
+          if (state is AttendanceSuccess) {
+            AppToast.success(state.message);
+            _onRefresh();
+          } else if (state is AttendanceError) {
             if (context.read<AttendanceBloc>().state is! AttendanceLoaded) {
               AppToast.error(state.message);
             }
@@ -128,6 +312,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                 ),
               Expanded(
                 child: _buildBody(
+                  l10n,
                   isLoading,
                   error,
                   hasData,
@@ -148,6 +333,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
   }
 
   Widget _buildBody(
+    AppLocalizations l10n,
     bool isLoading,
     bool error,
     bool hasData,
@@ -172,8 +358,8 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
 
     if ((isEmpty || (hasData && attendances.isEmpty)) && !isLoading) {
       return AttendanceEmptyView(
-        title: 'No attendance history',
-        subtitle: 'No attendance records found for this user.',
+        title: l10n.noAttendanceHistory,
+        subtitle: l10n.noAttendanceRecordsForUser,
         onRetry: _onRefresh,
       );
     }
@@ -201,7 +387,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
             children: [
               AttendanceSummaryCard(
                 icon: Icons.check_circle_outline,
-                label: 'Attendance %',
+                label: l10n.attendancePercent,
                 value: '$attendancePct%',
                 iconBgColor: AttendanceStatus.present.statusColor.withOpacity(0.1),
                 iconColor: AttendanceStatus.present.statusColor,
@@ -209,7 +395,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
               ),
               AttendanceSummaryCard(
                 icon: Icons.person_outline,
-                label: 'Present',
+                label: l10n.presentCount,
                 value: '$presentCount',
                 iconBgColor: AttendanceStatus.present.statusColor.withOpacity(0.1),
                 iconColor: AttendanceStatus.present.statusColor,
@@ -217,7 +403,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
               ),
               AttendanceSummaryCard(
                 icon: Icons.cancel_outlined,
-                label: 'Absent',
+                label: l10n.absentCount,
                 value: '$absentCount',
                 iconBgColor: AttendanceStatus.absent.statusColor.withOpacity(0.1),
                 iconColor: AttendanceStatus.absent.statusColor,
@@ -225,7 +411,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
               ),
               AttendanceSummaryCard(
                 icon: Icons.access_time,
-                label: 'Late',
+                label: AttendanceStatus.late.localizedName(l10n),
                 value: '$lateCount',
                 iconBgColor: AttendanceStatus.late.statusColor.withOpacity(0.1),
                 iconColor: AttendanceStatus.late.statusColor,
@@ -240,7 +426,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
           ),
           const SizedBox(height: 20),
           Text(
-            'Timeline',
+            l10n.timeline,
             style: TahfeezTextStyles.titleLg.copyWith(
               color: TahfeezColors.onSurface,
               fontWeight: FontWeight.w600,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../core/auth/auth_service.dart';
+import '../core/di/injection_container.dart' as di;
 import '../core/utils/toast_helper.dart';
 import '../features/auth/domain/entities/user.dart';
 import '../features/class/presentation/blocs/class_bloc.dart';
@@ -67,6 +69,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
 
         final displayStudents = hasData ? _filteredStudents(state) : <User>[];
         final allStudents = hasData ? state.students : <User>[];
+        final canAccessAttendance = di.sl<AuthService>().canAccessAttendance;
 
         return Scaffold(
           backgroundColor: TahfeezColors.background,
@@ -200,6 +203,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
                   hasData,
                   displayStudents,
                   allStudents,
+                  canAccessAttendance,
                 ),
               ),
             ],
@@ -244,6 +248,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
     bool hasData,
     List<User> displayStudents,
     List<User> allStudents,
+    bool canAccessAttendance,
   ) {
     if (isLoading) {
       return const StudentShimmer();
@@ -352,6 +357,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
         separatorBuilder: (_, __) => const SizedBox(height: 10),
         itemBuilder: (context, i) => _StudentCard(
           student: displayStudents[i],
+          canAccessAttendance: canAccessAttendance,
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -425,12 +431,14 @@ class _StudentsScreenState extends State<StudentsScreen> {
 
 class _StudentCard extends StatelessWidget {
   final User student;
+  final bool canAccessAttendance;
   final VoidCallback onTap;
   final VoidCallback onLogRecitation;
   final VoidCallback? onActivate;
 
   const _StudentCard({
     required this.student,
+    this.canAccessAttendance = false,
     required this.onTap,
     required this.onLogRecitation,
     this.onActivate,
@@ -582,8 +590,9 @@ class _StudentCard extends StatelessWidget {
                       style: const TextStyle(color: TahfeezColors.primary),
                     ),
                   ),
-                PopupMenuItem(
-                    value: 'attendance', child: Text(l10n.attendance)),
+                if (canAccessAttendance)
+                  PopupMenuItem(
+                      value: 'attendance', child: Text(l10n.attendance)),
               ],
             ),
           ],

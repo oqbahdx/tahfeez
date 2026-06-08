@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+import '../../../../core/auth/auth_service.dart';
 import '../../../../core/di/injection_container.dart' as di;
-import '../../../../core/constants/api_constants.dart';
-import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/toast_helper.dart';
 import '../../../../theme/tahfeez_theme.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -24,13 +22,11 @@ class ClassesScreen extends StatefulWidget {
 }
 
 class _ClassesScreenState extends State<ClassesScreen> {
-  bool _isPrivileged = false;
   final _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _checkRole();
     context.read<ClassBloc>().add(GetAllClassesEvent());
   }
 
@@ -38,22 +34,6 @@ class _ClassesScreenState extends State<ClassesScreen> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _checkRole() async {
-    try {
-      final apiClient = di.sl<ApiClient>();
-      final token = await apiClient.getAccessToken();
-      if (token == null || JwtDecoder.isExpired(token)) return;
-      final claims = JwtDecoder.decode(token);
-      final role = claims['role'] as String?;
-      if (mounted) {
-        setState(() {
-          _isPrivileged = role == RoleConstants.admin ||
-              role == RoleConstants.supervisor;
-        });
-      }
-    } catch (_) {}
   }
 
   void _onSearchChanged(String query) {
@@ -233,7 +213,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
               ],
             ),
           ),
-          floatingActionButton: _isPrivileged
+          floatingActionButton: di.sl<AuthService>().isPrivileged
               ? FloatingActionButton.extended(
                   heroTag: 'classes_fab',
                   onPressed: _navigateToAddClass,
@@ -412,7 +392,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
         itemCount: displayClasses.length,
         itemBuilder: (context, i) => ClassCard(
           classEntity: displayClasses[i],
-          showDelete: _isPrivileged,
+          showDelete: di.sl<AuthService>().isPrivileged,
           deleteDisabled: isRefreshing,
           onTap: () {},
           onDelete: () => _showDeleteConfirmation(displayClasses[i]),

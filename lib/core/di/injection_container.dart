@@ -40,6 +40,7 @@ import '../../features/attendance/domain/usecases/record_attendance_usecase.dart
 import '../../features/attendance/domain/usecases/update_attendance_usecase.dart';
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 
+import '../auth/auth_service.dart';
 import '../network/api_client.dart';
 
 final sl = GetIt.instance;
@@ -55,6 +56,8 @@ Future<void> init() async {
     iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
   );
   sl.registerSingleton<FlutterSecureStorage>(secureStorage);
+
+  sl.registerSingleton<AuthService>(AuthService());
 
   final dio = Dio();
   sl.registerSingleton<Dio>(dio);

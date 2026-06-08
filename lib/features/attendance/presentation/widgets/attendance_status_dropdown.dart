@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../theme/tahfeez_theme.dart';
 import '../../domain/enums/attendance_status.dart';
+import '../extensions/attendance_status_ext.dart';
 
 class AttendanceStatusDropdown extends StatelessWidget {
   final AttendanceStatus? value;
@@ -16,6 +18,7 @@ class AttendanceStatusDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: compact ? const EdgeInsets.symmetric(horizontal: 4) : null,
       decoration: compact
@@ -33,7 +36,7 @@ class AttendanceStatusDropdown extends StatelessWidget {
               : EdgeInsets.zero,
           borderRadius: BorderRadius.circular(12),
           hint: Text(
-            'Status',
+            l10n.status,
             style: TahfeezTextStyles.bodyMd.copyWith(
               color: TahfeezColors.onSurfaceVariant,
             ),
@@ -42,7 +45,7 @@ class AttendanceStatusDropdown extends StatelessWidget {
             return DropdownMenuItem(
               value: s,
               child: Text(
-                s.displayName,
+                s.localizedName(l10n),
                 style: TahfeezTextStyles.bodyMd.copyWith(
                   color: s.statusColor,
                   fontWeight: FontWeight.w500,

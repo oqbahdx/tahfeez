@@ -433,6 +433,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get excused => 'Excused';
 
   @override
+  String get late => 'Late';
+
+  @override
   String get submitAttendance => 'Submit Attendance';
 
   @override
@@ -640,6 +643,50 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get attendanceReportSubtitle =>
       'Review and manage student attendance records.';
+
+  @override
+  String get attendanceHistory => 'Attendance History';
+
+  @override
+  String get addAttendanceRecord => 'Add Attendance Record';
+
+  @override
+  String get addAttendance => 'Add Attendance';
+
+  @override
+  String get noAttendanceHistory => 'No attendance history';
+
+  @override
+  String get noAttendanceRecordsForUser =>
+      'No attendance records found for this user.';
+
+  @override
+  String get attendancePercent => 'Attendance %';
+
+  @override
+  String get timeline => 'Timeline';
+
+  @override
+  String get notesOptional => 'Notes (optional)';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get noAttendanceRecordsForDate =>
+      'No attendance records for this date.';
+
+  @override
+  String get dateCannotBeFuture => 'Date cannot be in the future';
+
+  @override
+  String get noStudentsToSave => 'No students to save';
+
+  @override
+  String get noAttendanceRecordsToSave => 'No attendance records to save';
 
   @override
   String get dateRange => 'Date Range';

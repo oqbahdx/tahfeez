@@ -902,6 +902,12 @@ abstract class AppLocalizations {
   /// **'Excused'**
   String get excused;
 
+  /// No description provided for @late.
+  ///
+  /// In en, this message translates to:
+  /// **'Late'**
+  String get late;
+
   /// No description provided for @submitAttendance.
   ///
   /// In en, this message translates to:
@@ -1309,6 +1315,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Review and manage student attendance records.'**
   String get attendanceReportSubtitle;
+
+  /// No description provided for @attendanceHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance History'**
+  String get attendanceHistory;
+
+  /// No description provided for @addAttendanceRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Attendance Record'**
+  String get addAttendanceRecord;
+
+  /// No description provided for @addAttendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Attendance'**
+  String get addAttendance;
+
+  /// No description provided for @noAttendanceHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No attendance history'**
+  String get noAttendanceHistory;
+
+  /// No description provided for @noAttendanceRecordsForUser.
+  ///
+  /// In en, this message translates to:
+  /// **'No attendance records found for this user.'**
+  String get noAttendanceRecordsForUser;
+
+  /// No description provided for @attendancePercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance %'**
+  String get attendancePercent;
+
+  /// No description provided for @timeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get timeline;
+
+  /// No description provided for @notesOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
+  String get notesOptional;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// No description provided for @noAttendanceRecordsForDate.
+  ///
+  /// In en, this message translates to:
+  /// **'No attendance records for this date.'**
+  String get noAttendanceRecordsForDate;
+
+  /// No description provided for @dateCannotBeFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Date cannot be in the future'**
+  String get dateCannotBeFuture;
+
+  /// No description provided for @noStudentsToSave.
+  ///
+  /// In en, this message translates to:
+  /// **'No students to save'**
+  String get noStudentsToSave;
+
+  /// No description provided for @noAttendanceRecordsToSave.
+  ///
+  /// In en, this message translates to:
+  /// **'No attendance records to save'**
+  String get noAttendanceRecordsToSave;
 
   /// No description provided for @dateRange.
   ///

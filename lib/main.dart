@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'core/auth/auth_service.dart';
 import 'core/di/injection_container.dart' as di;
 import 'l10n/app_localizations.dart';
 import 'features/auth/presentation/blocs/auth_bloc.dart';
@@ -13,6 +15,11 @@ import 'screens/main_shell.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
+  final prefs = await SharedPreferences.getInstance();
+  final savedRole = prefs.getString('role');
+  if (savedRole != null) {
+    di.sl<AuthService>().setRole(savedRole);
+  }
   runApp(const MainApp());
 }
 
@@ -45,24 +52,35 @@ class _MainAppState extends State<MainApp> {
         locale: _locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (state is AuthSplash || state is AuthInitial) {
-              return const SplashScreen();
-            }
+        home: BlocListener<AuthBloc, AuthState>(
+          listenWhen: (previous, current) =>
+              current is AuthAuthenticated || current is AuthUnauthenticated,
+          listener: (context, state) {
             if (state is AuthAuthenticated) {
-              return MainShell(onLocaleChange: _onLocaleChange);
+              di.sl<AuthService>().setRole(state.role);
+            } else if (state is AuthUnauthenticated) {
+              di.sl<AuthService>().clear();
             }
-            if (_showRegister) {
-              return RegisterScreen(
-                onLoginTap: () => setState(() => _showRegister = false),
-              );
-            }
-            return LoginScreen(
-              onLocaleChange: _onLocaleChange,
-              onRegisterTap: () => setState(() => _showRegister = true),
-            );
           },
+          child: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state is AuthSplash || state is AuthInitial) {
+                return const SplashScreen();
+              }
+              if (state is AuthAuthenticated) {
+                return MainShell(onLocaleChange: _onLocaleChange);
+              }
+              if (_showRegister) {
+                return RegisterScreen(
+                  onLoginTap: () => setState(() => _showRegister = false),
+                );
+              }
+              return LoginScreen(
+                onLocaleChange: _onLocaleChange,
+                onRegisterTap: () => setState(() => _showRegister = true),
+              );
+            },
+          ),
         ),
       ),
     );

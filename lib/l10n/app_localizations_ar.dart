@@ -433,6 +433,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get excused => 'معذور';
 
   @override
+  String get late => 'متأخر';
+
+  @override
   String get submitAttendance => 'إرسال الحضور';
 
   @override
@@ -638,6 +641,49 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get attendanceReportSubtitle => 'راجع وأدر سجلات حضور الطلاب.';
+
+  @override
+  String get attendanceHistory => 'سجل الحضور';
+
+  @override
+  String get addAttendanceRecord => 'إضافة سجل حضور';
+
+  @override
+  String get addAttendance => 'إضافة حضور';
+
+  @override
+  String get noAttendanceHistory => 'لا يوجد سجل حضور';
+
+  @override
+  String get noAttendanceRecordsForUser =>
+      'لم يتم العثور على سجلات حضور لهذا المستخدم.';
+
+  @override
+  String get attendancePercent => 'نسبة الحضور';
+
+  @override
+  String get timeline => 'الجدول الزمني';
+
+  @override
+  String get notesOptional => 'ملاحظات (اختياري)';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get saving => 'جارٍ الحفظ...';
+
+  @override
+  String get noAttendanceRecordsForDate => 'لا توجد سجلات حضور لهذا التاريخ.';
+
+  @override
+  String get dateCannotBeFuture => 'لا يمكن أن يكون التاريخ في المستقبل';
+
+  @override
+  String get noStudentsToSave => 'لا يوجد طلاب للحفظ';
+
+  @override
+  String get noAttendanceRecordsToSave => 'لا توجد سجلات حضور للحفظ';
 
   @override
   String get dateRange => 'نطاق التاريخ';

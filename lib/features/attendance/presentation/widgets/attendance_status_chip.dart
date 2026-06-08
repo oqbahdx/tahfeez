@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../theme/tahfeez_theme.dart';
 import '../../domain/enums/attendance_status.dart';
+import '../extensions/attendance_status_ext.dart';
 
 class AttendanceStatusChip extends StatelessWidget {
   final AttendanceStatus status;
@@ -14,6 +16,7 @@ class AttendanceStatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -33,7 +36,7 @@ class AttendanceStatusChip extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            status.displayName,
+            status.localizedName(l10n),
             style: TahfeezTextStyles.labelMd.copyWith(
               color: status.statusColor,
               fontSize: fontSize,
